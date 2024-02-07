@@ -4,7 +4,6 @@ CREATE TABLE fit_market.utilisateur (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50) NOT NULL,
     prenom VARCHAR(50) NOT NULL,
-    date_naissance DATE,
     email VARCHAR(100) UNIQUE NOT NULL,
     mot_de_passe VARCHAR(255) NOT NULL
 );
@@ -39,11 +38,11 @@ CREATE TABLE fit_market.commentaire (
 );
 
 -- Ajout d'utilisateurs
-INSERT INTO fit_market.utilisateur (nom, prenom, date_naissance, email, mot_de_passe)
+INSERT INTO fit_market.utilisateur (nom, prenom,email, mot_de_passe)
 VALUES
-    ('Doe', 'John', '1990-01-15', 'john.doe@email.com', 'motdepasse123'),
-    ('Smith', 'Alice', '1985-05-22', 'alice.smith@email.com', 'password456'),
-    ('Johnson', 'Bob', '1982-11-10', 'bob.johnson@email.com', 'securepass789');
+    ('Doe', 'John', 'john.doe@email.com', 'motdepasse123'),
+    ('Smith', 'Alice', 'alice.smith@email.com', 'password456'),
+    ('Johnson', 'Bob', 'bob.johnson@email.com', 'securepass789');
 
 -- Ajout de produits
 INSERT INTO fit_market.produit (nom, prix, image, description_produit)
