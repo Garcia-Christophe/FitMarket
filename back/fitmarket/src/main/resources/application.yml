@@ -1,0 +1,17 @@
+spring:
+  cloud:
+    mvc:
+      token-relay:
+        enabled: false
+  datasource:
+    url: jdbc:h2:mem:fitmarket;mode=oracle
+    username: tiila
+    password: tiila
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console.enabled: true
+  secrets:
+    openweather:
+      token: 91cd6b43df1f9eb64e4eb5fda8aebc68

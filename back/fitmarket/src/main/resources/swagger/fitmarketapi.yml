@@ -1,0 +1,201 @@
+openapi: '3.0.0'
+x-stoplight:
+  id: b52es8xrbv2qa
+info:
+  title: FitMarket
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths: {}
+components:
+  schemas:
+    Utilisateur:
+      title: Utilisateur
+      type: object
+      examples:
+        - id: 142
+          firstName: Alice
+          lastName: Smith
+          email: alice.smith@gmail.com
+          dateOfBirth: '1997-10-31'
+          emailVerified: true
+          signUpDate: '2019-08-24'
+      x-stoplight:
+        id: 1h8b72owgr96k
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: xoxy11r0lboui
+        nom:
+          type: string
+          x-stoplight:
+            id: 2g715lturpgdh
+        prenom:
+          type: string
+          x-stoplight:
+            id: sqo2ar7vrw5lz
+        email:
+          type: string
+          x-stoplight:
+            id: pjy5otrn2hn1j
+        motsDePasse:
+          type: string
+          x-stoplight:
+            id: pe0yihh1uqssl
+        dateNaissance:
+          type: string
+          x-stoplight:
+            id: btqoyemztq91x
+    Commentaire:
+      title: Commentaire
+      x-stoplight:
+        id: ioqe915vcp7pf
+      type: object
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: 3dcogxhsjox42
+        contenu:
+          type: string
+          x-stoplight:
+            id: sa2iyul3zc2ir
+        dateHeure:
+          type: string
+          x-stoplight:
+            id: 2n5j7mpx5ff9y
+        images:
+          type: array
+          x-stoplight:
+            id: 4s0hxq7ejkqwo
+          items:
+            x-stoplight:
+              id: mg5qiodk1u4k4
+            type: string
+        note:
+          type: integer
+          x-stoplight:
+            id: oyxinm7ts4p5t
+        produit:
+          $ref: '#/components/schemas/Produit'
+          x-stoplight:
+            id: yllkgs3x727f8
+        utilisateur:
+          $ref: '#/components/schemas/Utilisateur'
+          x-stoplight:
+            id: jrumut1nfda0a
+    Produit:
+      title: Produit
+      x-stoplight:
+        id: hl7nec5fwdmyy
+      type: object
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: ubbx8dn0fn09x
+        prix:
+          type: integer
+          x-stoplight:
+            id: dqxxaor5md129
+        image:
+          type: string
+          x-stoplight:
+            id: tdpmgwbekc7y3
+        description:
+          type: string
+          x-stoplight:
+            id: mj1cokug4sep7
+        categorie:
+          x-stoplight:
+            id: zblfwcg4xsigk
+          enum:
+            - MATERIEL
+            - VETEMENT
+            - COURS
+            - NUTRITION
+        titre:
+          type: string
+          x-stoplight:
+            id: jzgbnuypucaoo
+        commandes:
+          x-stoplight:
+            id: n2gs19q84uzu2
+          type: array
+          items:
+            $ref: '#/components/schemas/Commande'
+            x-stoplight:
+              id: 0kkdly561v34e
+    Cours:
+      title: Cours
+      x-stoplight:
+        id: sa3zc31rlfko2
+      type: object
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: x8y9s98d8j3jl
+        produit:
+          $ref: '#/components/schemas/Produit'
+          x-stoplight:
+            id: dhukmpf9iwoxw
+        nom:
+          type: string
+          x-stoplight:
+            id: 7w58sgc0lmumf
+        video:
+          type: string
+          x-stoplight:
+            id: ub19yq6enqwy4
+        description:
+          type: string
+          x-stoplight:
+            id: 5oy1umyu0gfex
+        joursHeures:
+          type: string
+          x-stoplight:
+            id: 2jfb4vusoalke
+        duree:
+          type: integer
+          x-stoplight:
+            id: r65y4564olfx3
+        adresse:
+          type: string
+          x-stoplight:
+            id: qcbo8u7fjawwg
+    Commande:
+      title: Commande
+      x-stoplight:
+        id: 1dpo669joyree
+      type: object
+      properties:
+        id:
+          type: integer
+          x-stoplight:
+            id: t7h9qy1zuy5ye
+        dateCommande:
+          type: string
+          x-stoplight:
+            id: v1bb6nst0vp6a
+        utilisateur:
+          $ref: '#/components/schemas/Utilisateur'
+          x-stoplight:
+            id: drinky91o77m9
+        produits:
+          type: array
+          x-stoplight:
+            id: pb09yw4ucngcx
+          items:
+            $ref: '#/components/schemas/Produit'
+            x-stoplight:
+              id: 9mzq97bkzai6q
+    Error:
+      type: object
+      title: Error
+      properties:
+        code:
+          type: string
+        description:
+          type: string
