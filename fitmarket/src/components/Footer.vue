@@ -1,8 +1,8 @@
 <template>
   <v-footer style="background-color: lightgray">
-    <v-card style="background-color: lightgray" flat tile class="white--text py-12 px-5" width="100%">
+    <v-card style="background-color: lightgray" flat tile class="white--text py-5 px-5" width="100%">
       <v-row>
-        <v-col cols="12" xs="12" sm="6" md="4" class="pa-16">
+        <v-col cols="12" xs="12" sm="6" md="4">
           <p class="text-center">FitMarket</p>
           <v-card-text class="mt-2">
             <p class="text-center">Trouvez les matériels, les cours, la nutrition et les vêtements qu'il vous faut pour
