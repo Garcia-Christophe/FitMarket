@@ -151,7 +151,7 @@
       <p style="font-size: xx-large; text-align: center; font-weight: bold">Nos partenaires</p>
 
       <div style="display: flex; column-gap: 100px; row-gap: 10px; justify-content: center; flex-wrap: wrap">
-        <a v-for="(partner, i) in partners" :key="i" :href="partner.url"
+        <a v-for="(partner, i) in partners" :key="i" :href="partner.url" target="_blank"
           style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-decoration: none; color: inherit;">
           <img :src="partner.logo" style="width: 100px; height: 100px; object-fit: contain">
           <p style="text-align: center">{{ partner.name }}</p>
