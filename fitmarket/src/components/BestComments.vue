@@ -9,31 +9,16 @@
       <input type="radio" name="slider" id="s4">
       <input type="radio" name="slider" id="s5">
 
-      <label v-for="(comment, i) in comments" :for="`s${i + 1}`" :id="`slide${i + 1}`" :key="i">
-        <!-- Note -->
-        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap">
-          <v-rating v-model="comment.note" color="yellow-darken-3" readonly></v-rating>
-          <p>{{ comment.date }}</p>
-        </div>
-
-        <!-- Contenu -->
-        <p style="font-weight: bold; font-size: large">{{ comment.titre }}</p>
-        <p style="text-align: justify; margin: 10px 0;">{{ comment.contenu }}</p>
-        <p style="font-weight: 500; margin-top: 10px; margin-bottom: 20px">~ {{ comment.prenomUtilisateur }} {{
-          comment.nomUtilisateur }}</p>
-
-        <!-- Images -->
-        <div style="display: flex; gap: 20px; overflow: auto">
-          <img v-for="(img, j) in comment.images" :src="img" :key="j"
-            style="width: 150px; height: 150px; object-fit: cover;">
-        </div>
-      </label>
+      <ProductComment v-for="(comment, i) in comments" :for="`s${i + 1}`" :id="`slide${i + 1}`" :key="i"
+        :comment="comment" carousel="true" />
     </section>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+
+import ProductComment from '@/components/ProductComment.vue';
 
 const comments = ref([{
   id: '1',
@@ -107,21 +92,6 @@ const comments = ref([{
   margin-bottom: 50px;
   perspective: 1000px;
   transform-style: preserve-3d;
-}
-
-#slider label {
-  margin: auto;
-  padding: 20px;
-  width: 45%;
-  height: 100%;
-  border-radius: 4px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  cursor: pointer;
-  transition: transform 0.4s ease;
-  background-color: white;
-  overflow: auto;
 }
 
 /* Tout à gauche */
