@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="transparent" class="text-white">
+  <v-app-bar class="text-white" style="position: sticky; height: fit-content">
     <img id="img-title" src="../assets/logo.png" width="50" height="50" @click="$router.push('/')" />
     <v-app-bar-title id="title" @click="$router.push('/')">Fit Market</v-app-bar-title>
     <v-btn append-icon="mdi mdi-chevron-down">Matériels</v-btn>

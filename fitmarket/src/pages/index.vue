@@ -1,11 +1,11 @@
 <template>
   <v-app>
+    <!-- Barre de navigation -->
+    <NavBar :color="navBarBg" />
+
+    <!-- Accueil 1re impression -->
     <div class="image shape"
       style="background: url('backgroundAccueilAllonge.png'); background-size: cover; background-position: center; display: flex; justify-content: center; position: absolute; height: 400px; width: 100%;">
-      <!-- Barre de navigation -->
-      <NavBar />
-
-      <!-- Accueil 1re impression -->
       <v-row class="row-acheter-maintenant">
         <v-btn prepend-icon="mdi mdi-star" v-on:click="scrollTo('best-comments')">Vos avis</v-btn>
         <v-btn rounded="xl" style="background: #D7473F; color: white;">Acheter maintenant</v-btn>
@@ -16,7 +16,7 @@
     <!-- Recherche de produits -->
     <v-main>
       <v-container>
-        <v-card style="margin-top: 380px" flat>
+        <v-card style="margin-top: 320px" flat>
           <!-- Tabs -->
           <v-tabs v-model="tabActif" color="#D7473F" align-tabs="center">
             <v-tab :value="1">Les plus récents</v-tab>
@@ -32,7 +32,7 @@
               <v-container fluid>
                 <v-row>
                   <v-col cols="12" sm="9">
-                    <Product />
+                    <ProductCard />
                   </v-col>
 
                   <v-col cols="12" sm="3" style="justify-content: center">
@@ -117,7 +117,7 @@
                       <v-btn :icon="noteOpen ? 'mdi-chevron-down' : 'mdi-chevron-up'"
                         v-on:click="noteOpen = !noteOpen"></v-btn>
                     </v-toolbar>
-                    <v-rating v-if="noteOpen" v-model="noteMin" color="yellow-darken-3"></v-rating>
+                    <v-rating v-if="noteOpen" v-model="noteMin" color="yellow-darken-3" hover></v-rating>
 
                     <!-- Prix maximum -->
                     <v-toolbar color="transparent">
@@ -167,9 +167,13 @@
 <script setup>
 import { ref } from "vue";
 import NavBar from "@/components/NavBar.vue"
-import Product from "@/components/Product.vue"
+import ProductCard from "@/components/ProductCard.vue"
 import BestComments from "@/components/BestComments.vue"
 import Footer from "@/components/Footer.vue"
+
+window.addEventListener('scroll', handleScroll);
+
+const navBarBg = ref(window.scrollY > 0 ? '#D7473F' : 'transparent')
 
 const categoriesOpen = ref(true)
 const colorsOpen = ref(true)
@@ -268,6 +272,10 @@ const partners = ref([{
 
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+}
+
+function handleScroll() {
+  navBarBg.value = window.scrollY > 0 ? '#D7473F' : 'transparent'
 }
 </script>
 

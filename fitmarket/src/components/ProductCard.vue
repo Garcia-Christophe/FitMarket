@@ -10,10 +10,10 @@
         </v-card-title>
 
         <v-card-actions>
-          <v-btn prepend-icon="mdi mdi-cart">{{ product.price }}</v-btn>
+          <p style="margin-left: 8px">{{ product.price }}</p>
           <v-spacer></v-spacer>
-          <v-btn size="small" color="surface-radiant" variant="text" icon="mdi-heart"></v-btn>
-          <v-btn size="small" color="surface-radiant" variant="text" icon="mdi-share-variant"></v-btn>
+          <v-btn size="small" color="surface-radiant" variant="text" icon="mdi-cart"></v-btn>
+          <v-btn size="small" color="surface-radiant" variant="text" icon="mdi-link"></v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
