@@ -13,7 +13,7 @@
         style="min-width: 150px"></v-text-field>
     </div>
 
-    <v-btn v-if="!collapseNavBar" prepend-icon="mdi mdi-account" href="/sign">Compte</v-btn>
+    <v-btn v-if="!collapseNavBar" prepend-icon="mdi mdi-account" href="/account">Compte</v-btn>
     <v-btn v-if="!collapseNavBar" prepend-icon="mdi mdi-cart">Panier</v-btn>
   </v-app-bar>
 </template>
