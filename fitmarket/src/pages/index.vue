@@ -28,11 +28,11 @@
 
           <!-- Contenu des tabs -->
           <v-window v-model="tabActif">
-            <v-window-item v-for="n in 5" :key="n" :value="n" :transition="true" style="width: 90%; margin: 0% 5%">
+            <v-window-item v-for="n in 5" :key="n" :value="n" :transition="true" style="width: 100%; padding: 0% 5%">
               <v-container fluid>
                 <v-row>
                   <v-col cols="12" sm="9">
-                    <ProductCard />
+                    <ProductCards />
                   </v-col>
 
                   <v-col cols="12" sm="3" style="justify-content: center">
@@ -167,7 +167,7 @@
 <script setup>
 import { ref } from "vue";
 import NavBar from "@/components/NavBar.vue"
-import ProductCard from "@/components/ProductCard.vue"
+import ProductCards from "@/components/ProductCards.vue"
 import BestComments from "@/components/BestComments.vue"
 import Footer from "@/components/Footer.vue"
 
