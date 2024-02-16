@@ -11,10 +11,11 @@
           <v-btn v-if="product.images.length > 1" elevation="0" v-on:click="nextImage()"><u>Prochaine image</u></v-btn>
 
           <!-- actions -->
-          <div style="display: flex; justify-content: space-evenly; margin: 20px 0; flex-wrap: wrap; gap: 20px;">
-            <v-btn style="min-width: 250px" prepend-icon="mdi mdi-cart" v-on:click="() => console.log('au panier !')"
-              color="#D7473F">Ajouter au panier</v-btn>
-            <v-btn style="min-width: 250px" prepend-icon="mdi mdi-link"
+          <div style="display: flex; justify-content: space-evenly; margin: 20px 0; flex-wrap: wrap; column-gap: 20px;">
+            <v-text-field style="max-width: 100px" type="number" color="#D7473F" v-model="quantity" min="1" required />
+            <v-btn style="min-width: 200px; margin-top: 10px" prepend-icon="mdi mdi-cart"
+              v-on:click="() => console.log('au panier !')" color="#D7473F">Ajouter au panier</v-btn>
+            <v-btn style="min-width: 200px; margin-top: 10px" prepend-icon="mdi mdi-link"
               v-on:click="() => console.log('lien copié !')">Copier le lien</v-btn>
           </div>
         </div>
@@ -129,6 +130,7 @@ const product = ref({
     images: []
   }]
 })
+const quantity = ref(1);
 const noteAvg = ref(noteAvgCalc())
 
 const defaultComment = {

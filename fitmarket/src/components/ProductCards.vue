@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" sm="4" v-for="(product, i) in products" :key="i">
-      <v-card class="mx-auto product" max-width="344">
+      <v-card class="mx-auto product" max-width="344" @click="$router.push('/product?id=' + i)">
         <v-img :src="product.img" height="200px" cover></v-img>
         <v-divider></v-divider>
 
@@ -24,7 +24,7 @@
 const products = [
   {
     img: "backgroundAccueil.png",
-    type: "Bedroom",
+    type: "BedroomBedroom Bedroom Bedroom BedroomBedroom",
     price: "50 €"
   },
   {
