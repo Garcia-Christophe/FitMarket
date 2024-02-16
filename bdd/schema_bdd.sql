@@ -22,7 +22,7 @@ CREATE TABLE product (
     title VARCHAR(100) NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     description TEXT NOT NULL,
-    category VARCHAR(100)
+    category VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE image_product (
