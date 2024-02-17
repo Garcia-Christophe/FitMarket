@@ -577,9 +577,12 @@ VALUES
 INSERT INTO order_product (id_order, id_product, quantity)
 VALUES
     (1, 31, 1),
+    (1, 32, 1),
     (2, 3, 1),
+    (2, 35, 1),
     (2, 21, 3),
-    (3, 15, 5);
+    (3, 15, 5),
+    (3, 38, 1);
 
 -- Ajout de commentaires
 INSERT INTO comment (title, content, date_time, note, id_user, id_product)

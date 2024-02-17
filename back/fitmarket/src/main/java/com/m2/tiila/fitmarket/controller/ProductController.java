@@ -32,7 +32,7 @@ public class ProductController {
     public Response getProduct(@PathParam("id") Integer id) {
         try {
             return Response.ok(this.productBusiness.getProduct(id)).build();
-        }catch(ArrayIndexOutOfBoundsException e){
+        }catch(Exception e){
             BadRequestException badRequestException =  new BadRequestException();
             return badRequestException.toResponse(Response.Status.NOT_FOUND, "Aucun produit avec l'id : "+id);
         }

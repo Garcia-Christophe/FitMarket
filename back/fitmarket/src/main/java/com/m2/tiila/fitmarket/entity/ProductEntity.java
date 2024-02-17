@@ -15,5 +15,4 @@ public class ProductEntity {
     private String description;
     private String category;
     private String title;
-    private List<Order> orders;
 }

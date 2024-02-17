@@ -14,7 +14,6 @@ public class ProductMapper {
         dto.setDescription(entity.getDescription());
         dto.setCategory(Category.fromValue(entity.getCategory()));
         dto.setImages(entity.getImages());
-        dto.setOrders(entity.getOrders());
         dto.setPrice(entity.getPrice());
 
         return dto;
@@ -28,7 +27,6 @@ public class ProductMapper {
         entity.setDescription(dto.getDescription());
         entity.setCategory(dto.getCategory().toString());
         entity.setImages(dto.getImages());
-        entity.setOrders(dto.getOrders());
         entity.setPrice(dto.getPrice());
 
         return entity;
