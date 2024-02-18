@@ -7,8 +7,8 @@ public class BadRequestException {
 
     public Response toResponse(Response.Status status,String message) {
         var error = new Error();
-        error.setCode(message);
-        error.setDescription(status.name());
+        error.setCode(String.valueOf(status.getStatusCode()));
+        error.setDescription(message);
         return Response.status(status).entity(error).build();
     }
 
