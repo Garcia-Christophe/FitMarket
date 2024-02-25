@@ -20,6 +20,9 @@ public class UserRepository {
     private final static String SQL_GET_USER_BY_EMAIL_AND_PASSWORD = "SELECT m.* FROM member m "+
             "WHERE m.email=:email AND m.password=:password";
 
+    private final static String SQL_GET_USER_BY_ID = "SELECT m.* FROM member m "+
+            "WHERE m.id=:id";
+
     private final static String SQL_CREATE_MEMBER = "INSERT INTO member (lastname, firstname, email, password) " +
             "VALUES (:lastname, :firstname, :email, :password)";
 
@@ -57,5 +60,13 @@ public class UserRepository {
         params.put("password",member.getPassword());
 
         this.jdbcTemplate.update(SQL_UPDATE_MEMBER, params);
+    }
+
+    public MemberEntity getUserById(int id) {
+        var params = new HashMap<String, Object>();
+        params.put("id", id);
+
+        List<Member> member = new ArrayList<Member>(this.jdbcTemplate.query(SQL_GET_USER_BY_ID, params, new BeanPropertyRowMapper<>(Member.class)));
+        return member.stream().map(UserMapper::toEntity).toList().get(0);
     }
 }

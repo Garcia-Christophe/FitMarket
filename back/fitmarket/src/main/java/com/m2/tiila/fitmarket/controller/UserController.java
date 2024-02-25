@@ -46,12 +46,12 @@ public class UserController {
             return Response.ok("Utilisateur créé.").build();
         }catch (Exception e){
             BadRequestException badRequestException =  new BadRequestException();
-            return badRequestException.toResponse(Response.Status.NOT_FOUND, "Création de l'utilisateur impossible.");
+            return badRequestException.toResponse(Response.Status.BAD_REQUEST, "Création de l'utilisateur impossible.");
         }
     }
 
-    @Path("/update/{id}")
-    @POST
+    @Path("/{id}")
+    @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateMember(@PathParam("id") Integer id, Member member){
@@ -60,7 +60,7 @@ public class UserController {
             return Response.ok("Utilisateur modifier.").build();
         }catch (Exception e){
             BadRequestException badRequestException =  new BadRequestException();
-            return badRequestException.toResponse(Response.Status.NOT_FOUND, "Modification de l'utilisateur impossible.");
+            return badRequestException.toResponse(Response.Status.BAD_REQUEST, "Modification de l'utilisateur impossible.");
         }
     }
 }
