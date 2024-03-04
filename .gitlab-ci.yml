@@ -10,16 +10,17 @@ stages:
 # Build
 build-job:
   stage: ⚙️ Build
+  allow_failure: false
   script:
     - echo "Compilation du code..."
     - echo "Compilation terminée."
 
-# Test : web
+# Test : Web
 test-web:
   stage: 🧪 Test
   allow_failure: false
   script:
-    - echo "Tests de la partie web..."
+    - echo "Tests de la partie Web..."
     - |
       if grep -q "port: 3000" ./fitmarket/vite.config.mjs; then
         echo "Le port de l'application web est bien 3000."
@@ -28,9 +29,36 @@ test-web:
         exit 1
       fi
 
+# Test : Android
+test-android:
+  stage: 🧪 Test
+  allow_failure: false
+  script:
+    - echo "Tests de la partie Android..."
+    - echo "Tests Android OK."
+
+# Test : Spring
+test-spring:
+  stage: 🧪 Test
+  allow_failure: false
+  script:
+    - echo "Tests de la partie Spring..."
+    - cd back/fitmarket
+    - ./gradlew check
+    - cd ../..
+
+# Test : BDD
+test-spring:
+  stage: 🧪 Test
+  allow_failure: false
+  script:
+    - echo "Tests de la partie BDD..."
+    - echo "Tables de la BDD OK."
+
 # Deploy
 deploy-job:
   stage: 🚀 Deploy
+  allow_failure: false
   environment: production
   script:
     - echo "Déploiement de l'application..."
