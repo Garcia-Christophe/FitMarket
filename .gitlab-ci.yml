@@ -12,8 +12,39 @@ build-job:
   stage: ⚙️ Build
   allow_failure: false
   script:
-    - echo "Compilation du code..."
-    - echo "Compilation terminée."
+    - echo "Vérification de la présence des fichiers importants..."
+    # Web
+    - |
+      if [ -f ./fitmarket/package.json ]; then
+        echo "Web: Fichier ./fitmarket/package.json présent."
+      else
+        echo "Web: Fichier ./fitmarket/package.json absent !"
+        exit 1
+      fi
+    # Android
+    - |
+      if [ -f ./README.md ]; then
+        echo "Web: Fichier ./README.md présent."
+      else
+        echo "Web: Fichier ./README.md absent !"
+        exit 1
+      fi
+    # Spring
+    - |
+      if [ -f ./back/fitmarket/src/main/java/com/m2/tiila/fitmarket/FitmarketApplication.java ]; then
+        echo "Web: Fichier ./back/fitmarket/src/main/java/com/m2/tiila/fitmarket/FitmarketApplication.java présent."
+      else
+        echo "Web: Fichier ./back/fitmarket/src/main/java/com/m2/tiila/fitmarket/FitmarketApplication.java absent !"
+        exit 1
+      fi
+    # BDD
+    - |
+      if [ -f ./bdd/schema_bdd.sql ]; then
+        echo "Web: Fichier ./bdd/schema_bdd.sql présent."
+      else
+        echo "Web: Fichier ./bdd/schema_bdd.sql absent !"
+        exit 1
+      fi
 
 # Test : Web
 test-web:
@@ -48,7 +79,7 @@ test-spring:
     - cd ../..
 
 # Test : BDD
-test-spring:
+test-bdd:
   stage: 🧪 Test
   allow_failure: false
   script:
