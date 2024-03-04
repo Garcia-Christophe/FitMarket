@@ -5,7 +5,9 @@ import com.m2.tiila.fitmarket.mapper.CommentMapper;
 import dto.fitmarketapi.Comment;
 import jakarta.inject.Inject;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -26,7 +28,9 @@ public class CommentRepository {
             "GROUP BY c.id "+
             "ORDER BY c.note DESC";
 
-    private final static String SQL_UPDATE_MEMBER = "UPDATE MEMBER SET lastname = :lastname, firstname = :firstname, email= :email, password = :password WHERE id = :id";
+    private final static String SQL_CREATE_COMMENT = "INSERT INTO COMMENT (title, content, date_time, note, id_user, id_product) VALUES (:title, :content, :dateTime, :note, :user, :product)";
+
+    private final static String SQL_INSERT_COMMENT_IMAGE = "INSERT INTO image_comment (id_comment, image) VALUES (:id, :image)";
 
     private final static String SQL_GET_ID_MEMBER = "SELECT id_user FROM comment where id = :id";
 
@@ -48,15 +52,26 @@ public class CommentRepository {
     }
 
     public void createComment(Comment dto) {
-       /* var params = new HashMap<String, Object>();
-        params.put("lastname",member.getLastname());
-        params.put("firstname",member.getFirstname());
-        params.put("email",member.getEmail());
-        params.put("password",member.getPassword());
+        var params = new HashMap<String, Object>();
+        params.put("content",dto.getContent());
+        params.put("dateTime",dto.getDateTime());
+        params.put("note",dto.getNote());
+        params.put("product",dto.getProduct().getId());
+        params.put("user",dto.getUser().getId());
+        params.put("title",dto.getTitle());
 
-        this.jdbcTemplate.update(SQL_CREATE_MEMBER, params);*/
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
 
-        //TODO add images
+        this.jdbcTemplate.update(SQL_CREATE_COMMENT, new MapSqlParameterSource(params), generatedKeyHolder);
+        var paramComment = new HashMap<String, Object>();
+        Integer id = (Integer) generatedKeyHolder.getKeys().get("ID");
+        System.out.println("ID = " + id);
+        paramComment.put("id",id);
+
+        for(String i : dto.getImages()){
+            paramComment.put("image",i);
+            this.jdbcTemplate.update(SQL_INSERT_COMMENT_IMAGE, paramComment);
+        }
     }
 
     public int getIdMemberByComment(Integer id) {
@@ -69,7 +84,7 @@ public class CommentRepository {
     public int getIdProductByComment(Integer id) {
         var params = new HashMap<String, Object>();
         params.put("id",id);
-        List<Integer> idProduct = new ArrayList<Integer>(this.jdbcTemplate.queryForList(SQL_GET_ID_MEMBER, params, Integer.class));
+        List<Integer> idProduct = new ArrayList<Integer>(this.jdbcTemplate.queryForList(SQL_GET_ID_PRODUCT, params, Integer.class));
         return idProduct.get(0);
     }
 }

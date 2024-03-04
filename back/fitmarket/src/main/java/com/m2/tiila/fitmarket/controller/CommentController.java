@@ -51,12 +51,12 @@ public class CommentController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createComment(Comment comment){
-        try{
+       // try{
             commentBusiness.createComment(toEntity(comment));
             return Response.ok("Commentaire ajouté.").build();
-        }catch (Exception e){
+       /* }catch (Exception e){
             BadRequestException badRequestException =  new BadRequestException();
             return badRequestException.toResponse(Response.Status.BAD_REQUEST, "Création du commentaire impossible.");
-        }
+        }*/
     }
 }
