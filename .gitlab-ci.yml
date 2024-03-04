@@ -7,13 +7,13 @@ stages:
   - 🧪 Test
   - 🚀 Deploy
 
-# Build
-build-job:
+# Build : Web
+# Vérification de la présence de ./fitmarket/package.json
+build-web:
   stage: ⚙️ Build
   allow_failure: false
   script:
-    - echo "Vérification de la présence des fichiers importants..."
-    # Web
+    - echo "Vérification de la présence de ./fitmarket/package.json..."
     - |
       if [ -f ./fitmarket/package.json ]; then
         echo "Web: Fichier ./fitmarket/package.json présent."
@@ -21,32 +21,54 @@ build-job:
         echo "Web: Fichier ./fitmarket/package.json absent !"
         exit 1
       fi
-    # Android
+
+# Build : Android
+# Vérification de la présence de ./README.md
+build-android:
+  stage: ⚙️ Build
+  allow_failure: false
+  script:
+    - echo "Vérification de la présence de ./README.md..."
     - |
       if [ -f ./README.md ]; then
-        echo "Web: Fichier ./README.md présent."
+        echo "Android: Fichier ./README.md présent."
       else
-        echo "Web: Fichier ./README.md absent !"
+        echo "Android: Fichier ./README.md absent !"
         exit 1
       fi
-    # Spring
+
+# Build : Spring
+# Vérification de la présence de ./back/fitmarket/src/main/java/com/m2/tiila/fitmarket/FitmarketApplication.java
+build-spring:
+  stage: ⚙️ Build
+  allow_failure: false
+  script:
+    - echo "Vérification de la présence de ./back/fitmarket/src/main/java/com/m2/tiila/fitmarket/FitmarketApplication.java..."
     - |
       if [ -f ./back/fitmarket/src/main/java/com/m2/tiila/fitmarket/FitmarketApplication.java ]; then
-        echo "Web: Fichier ./back/fitmarket/src/main/java/com/m2/tiila/fitmarket/FitmarketApplication.java présent."
+        echo "Spring: Fichier ./back/fitmarket/src/main/java/com/m2/tiila/fitmarket/FitmarketApplication.java présent."
       else
-        echo "Web: Fichier ./back/fitmarket/src/main/java/com/m2/tiila/fitmarket/FitmarketApplication.java absent !"
+        echo "Spring: Fichier ./back/fitmarket/src/main/java/com/m2/tiila/fitmarket/FitmarketApplication.java absent !"
         exit 1
       fi
-    # BDD
+
+# Build : BDD
+# Vérification de la présence de ./bdd/schema_bdd.sql
+build-bdd:
+  stage: ⚙️ Build
+  allow_failure: false
+  script:
+    - echo "Vérification de la présence de ./bdd/schema_bdd.sql..."
     - |
       if [ -f ./bdd/schema_bdd.sql ]; then
-        echo "Web: Fichier ./bdd/schema_bdd.sql présent."
+        echo "BDD: Fichier ./bdd/schema_bdd.sql présent."
       else
-        echo "Web: Fichier ./bdd/schema_bdd.sql absent !"
+        echo "BDD: Fichier ./bdd/schema_bdd.sql absent !"
         exit 1
       fi
 
 # Test : Web
+# Vérification du port utilisé par l'application
 test-web:
   stage: 🧪 Test
   allow_failure: false
@@ -59,34 +81,70 @@ test-web:
         echo "Le port de l'application web n'est pas 3000 !"
         exit 1
       fi
+  needs:
+    - job: "build-web"
+      artifacts: true
 
 # Test : Android
+# ...
 test-android:
   stage: 🧪 Test
   allow_failure: false
   script:
     - echo "Tests de la partie Android..."
-    - echo "Tests Android OK."
+    - |
+      if [ -f ./README.md ]; then
+        echo "Android: Fichier ./README.md présent."
+      else
+        echo "Android: Fichier ./README.md absent !"
+        exit 1
+      fi
+  needs:
+    - job: "build-android"
+      artifacts: true
 
 # Test : Spring
+# Lancement de check de Gradlew
 test-spring:
   stage: 🧪 Test
   allow_failure: false
   script:
     - echo "Tests de la partie Spring..."
     - cd back/fitmarket
+    - chmod +x ./gradlew
     - ./gradlew check
     - cd ../..
+  needs:
+    - job: "build-spring"
+      artifacts: true
 
 # Test : BDD
+# Vérification de la création de TOUTES les tables
 test-bdd:
   stage: 🧪 Test
   allow_failure: false
   script:
     - echo "Tests de la partie BDD..."
-    - echo "Tables de la BDD OK."
+    - |
+      if grep -qE 'CREATE\s+TABLE\s+member\b' bdd/schema_bdd.sql && \
+        grep -qE 'CREATE\s+TABLE\s+product\b' bdd/schema_bdd.sql && \
+        grep -qE 'CREATE\s+TABLE\s+image_product\b' bdd/schema_bdd.sql && \
+        grep -qE 'CREATE\s+TABLE\s+classes\b' bdd/schema_bdd.sql && \
+        grep -qE 'CREATE\s+TABLE\s+comment\b' bdd/schema_bdd.sql && \
+        grep -qE 'CREATE\s+TABLE\s+image_comment\b' bdd/schema_bdd.sql && \
+        grep -qE 'CREATE\s+TABLE\s+orders\b' bdd/schema_bdd.sql && \
+        grep -qE 'CREATE\s+TABLE\s+order_product\b' bdd/schema_bdd.sql; then
+        echo "Toutes les tables sont présentes."
+      else
+        echo "Une ou plusieurs tables sont manquantes !"
+        exit 1
+      fi
+  needs:
+    - job: "build-bdd"
+      artifacts: true
 
 # Deploy
+# ...
 deploy-job:
   stage: 🚀 Deploy
   allow_failure: false
@@ -94,3 +152,8 @@ deploy-job:
   script:
     - echo "Déploiement de l'application..."
     - echo "Application déployée avec succès."
+  needs:
+    - "test-web"
+    - "test-android"
+    - "test-spring"
+    - "test-bdd"
