@@ -20,7 +20,13 @@ test-web:
   allow_failure: false
   script:
     - echo "Tests de la partie web..."
-    - if grep -q "port: 3000" ./fitmarket/vite.config.mjs; then echo "Le port de l'application web est bien 3000."; else echo "Le port de l'application web n'est pas 3000 !"; exit 1 fi
+    - |
+      if grep -q "port: 3000" ./fitmarket/vite.config.mjs; then
+        echo "Le port de l'application web est bien 3000."
+      else
+        echo "Le port de l'application web n'est pas 3000 !"
+        exit 1
+      fi
 
 # Deploy
 deploy-job:
