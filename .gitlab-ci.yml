@@ -6,6 +6,7 @@ stages:
   - ⚙️ Build
   - 🧪 Test
   - 🚀 Deploy
+  - 📖 Documentation
 
 # Build : Web
 # Vérification de la présence de ./fitmarket/package.json
@@ -157,3 +158,18 @@ deploy-job:
     - "test-android"
     - "test-spring"
     - "test-bdd"
+
+# Documentation
+# Vérification de la présence de la documentation ./README.md
+documentation-job:
+  stage: 📖 Documentation
+  allow_failure: false
+  script:
+    - echo "Vérification de la présence de la documentation du projet..."
+    - |
+      if [ -f ./README.md ]; then
+        echo "Documentation ./README.md présent."
+      else
+        echo "Documentation ./README.md absente !"
+        exit 1
+      fi
