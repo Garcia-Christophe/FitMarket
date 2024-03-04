@@ -3,17 +3,20 @@
     <!-- Note -->
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap">
       <v-rating :model-value="props.comment.note" color="yellow-darken-3" readonly half-increments></v-rating>
-      <p>{{ props.comment.date }}</p>
+      <p>{{ new Date(props.comment.date).toLocaleDateString('fr-FR', {
+    day: 'numeric', month: 'long', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  }) }}</p>
     </div>
 
     <!-- Contenu -->
     <p style="font-weight: bold; font-size: large">{{ props.comment.titre }}</p>
     <p style="text-align: justify; margin: 10px 0;">{{ props.comment.contenu }}</p>
-    <p style="font-weight: 500; margin-top: 10px; margin-bottom: 20px">~ {{ props.comment.prenomUtilisateur }} {{
-      props.comment.nomUtilisateur }}</p>
+    <p style="font-weight: 500; margin-top: 10px; margin-bottom: 20px">~ {{ props.comment.userFirstname }} {{
+    props.comment.userLastname }}</p>
 
     <!-- Images -->
-    <div style="display: flex; gap: 20px; overflow: auto">
+    <div v-if="props.comment.images.length" style="display: flex; gap: 20px; overflow: auto">
       <img v-for="(img, i) in props.comment.images" :src="img" :key="i"
         style="width: 150px; height: 150px; object-fit: cover;">
     </div>

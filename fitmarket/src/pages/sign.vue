@@ -33,16 +33,16 @@
                             pour vous connecter
                           </p>
                           <v-form>
-                            <v-text-field label="Email" name="Email" prepend-icon="mdi-email" type="email"
-                              color="#D7473F" />
-                            <v-text-field label="Password" name="password" prepend-icon="mdi-lock" type="password"
-                              color="#D7473F" />
+                            <v-text-field v-model="signInUser.email" label="Adresse email" name="email"
+                              prepend-icon="mdi-email" type="email" color="#D7473F" />
+                            <v-text-field v-model="signInUser.password" label="Mot de passe" name="password"
+                              prepend-icon="mdi-lock" type="password" color="#D7473F" />
                           </v-form>
                         </div>
 
                         <!-- Bouton Se connecter -->
                         <div style="display: flex; flex-direction: column; width: 25%; margin: auto">
-                          <v-btn rounded color="#D7473F">SE CONNECTER</v-btn>
+                          <v-btn rounded color="#D7473F" @click="signIn">SE CONNECTER</v-btn>
                         </div>
                       </v-card-text>
                     </v-col>
@@ -101,15 +101,15 @@
                           </p>
                           <v-form style="display: flex; flex-direction: column; gap: 20px">
                             <v-row style="display: flex; gap: 20px">
-                              <v-text-field label="Nom" name="Nom" prepend-icon="mdi-card-account-details" type="text"
+                              <v-text-field label="Nom" name="nom" prepend-icon="mdi-card-account-details" type="text"
                                 color="#D7473F" />
-                              <v-text-field label="Prénom" name="Prénom" prepend-icon="mdi-card-account-details"
+                              <v-text-field label="Prénom" name="prenom" prepend-icon="mdi-card-account-details"
                                 type="text" color="#D7473F" />
                             </v-row>
                             <v-row style="display: flex; gap: 20px">
-                              <v-text-field label="Email" name="Email" prepend-icon="mdi-email" type="email"
+                              <v-text-field label="Adresse email" name="email" prepend-icon="mdi-email" type="email"
                                 color="#D7473F" />
-                              <v-text-field label="Password" name="password" prepend-icon="mdi-lock" type="password"
+                              <v-text-field label="Mot de passe" name="password" prepend-icon="mdi-lock" type="password"
                                 color="#D7473F" />
                             </v-row>
                           </v-form>
@@ -117,7 +117,7 @@
 
                         <!-- Bouton S'inscrire -->
                         <div style="display: flex; flex-direction: column; width: 25%; margin: auto">
-                          <v-btn rounded color="#D7473F">S'INSCRIRE</v-btn>
+                          <v-btn rounded color="#D7473F" @click="signUp">S'INSCRIRE</v-btn>
                         </div>
                       </v-card-text>
                     </v-col>
@@ -137,4 +137,27 @@ import { ref } from 'vue';
 import NavBar from '@/components/NavBar.vue'
 
 const step = ref(1);
+const signInUser = ref({
+  email: null,
+  password: null,
+})
+
+async function signIn() {
+  const result = await (await fetch('http://localhost:8080/api/v1/sign/in', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      "email": "john.smith@email.com",
+      "password": "motdepasse1"
+    })
+  })).json()
+  console.log(result);
+}
+
+async function signUp() {
+  // 
+}
 </script>

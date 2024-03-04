@@ -13,16 +13,34 @@
           <!-- actions -->
           <div style="display: flex; justify-content: space-evenly; margin: 20px 0; flex-wrap: wrap; column-gap: 20px;">
             <v-text-field style="max-width: 100px" type="number" color="#D7473F" v-model="quantity" min="1" required />
-            <v-btn style="min-width: 200px; margin-top: 10px" prepend-icon="mdi mdi-cart"
-              v-on:click="() => console.log('au panier !')" color="#D7473F">Ajouter au panier</v-btn>
-            <v-btn style="min-width: 200px; margin-top: 10px" prepend-icon="mdi mdi-link"
-              v-on:click="() => console.log('lien copié !')">Copier le lien</v-btn>
+            <v-btn style="min-width: 200px; margin-top: 10px" prepend-icon="mdi mdi-cart" v-on:click="addToCart"
+              color="#D7473F">Ajouter au panier</v-btn>
+            <v-btn style="min-width: 200px; margin-top: 10px" prepend-icon="mdi mdi-link" v-on:click="copyLink">Copier
+              le lien</v-btn>
+            <v-snackbar v-model="linkCopied" :timeout="2000" elevation="24">
+              Lien copié dans le presse-papier !
+
+              <template v-slot:actions>
+                <v-btn color="#D56F97" variant="text" @click="linkCopied = false">
+                  Fermer
+                </v-btn>
+              </template>
+            </v-snackbar>
+            <v-snackbar v-model="addedToCart" :timeout="2000" elevation="24">
+              Produit ajouté au panier !
+
+              <template v-slot:actions>
+                <v-btn color="#D56F97" variant="text" @click="addedToCart = false">
+                  Fermer
+                </v-btn>
+              </template>
+            </v-snackbar>
           </div>
         </div>
 
         <div style="display: flex; flex-direction: column; flex-shrink: 100;">
           <!-- Titre -->
-          <h1>{{ product.name }}</h1>
+          <h1>{{ product.title }}</h1>
 
           <!-- Prix + note moyenne -->
           <div
@@ -35,7 +53,7 @@
           </div>
 
           <!-- description -->
-          <p style="text-align: justify; word-wrap: break-word; white-space: pre-wrap;">
+          <p style="word-wrap: break-word; white-space: pre-wrap;">
             {{ product.description }}</p>
         </div>
       </div>
@@ -48,13 +66,13 @@
           Explorez les retours d'expérience de nos clients fidèles !
         </p>
 
-        <div style="display: flex; flex-direction: column; gap: 50px; margin-bottom: 50px;">
-          <ProductComment v-for="(comment, i) in product.comments" :key="i" :comment="comment" />
+        <div v-if="product.comments.length"
+          style="display: flex; flex-direction: column; gap: 50px; margin-bottom: 50px;">
+          <ProductComment v-for="( comment, i ) in  product.comments " :key="i" :comment="comment" />
         </div>
       </div>
 
       <!-- formulaire d'ajout d'un commentaire -->
-      <!-- TODO: html/css/js -->
       <v-card>
         <v-card-text style="display: flex; flex-direction: column; gap: 20px">
           <p style="font-size: x-large; text-align: center; margin: 20px auto;">
@@ -78,7 +96,6 @@
               <v-btn rounded color="#D7473F" v-on:click="publishComment()">PUBLIER</v-btn>
             </div>
           </v-form>
-
         </v-card-text>
       </v-card>
     </v-main>
@@ -87,51 +104,59 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRoute } from 'vue-router'
 import NavBar from '@/components/NavBar.vue'
 import ProductComment from '@/components/ProductComment.vue';
 
 window.addEventListener('resize', handleWrap);
 
+const route = useRoute();
+
 const idxImg = ref(0);
 const files = ref(null);
 
 const product = ref({
-  name: "Banc de Musculation",
-  price: 29.99,
-  description: "Hauteur ajustable : Notre banc de musculation et son rouleau se règlent très rapidement à 7 différentes hauteurs (de 35 à 50 cm) en fonction de l'exercice souhaité et de votre morphologie.\n\nConfort maximal: Il était essentiel pour nous de proposer un banc de musculation complet alliant confort et design.Ce banc de sport propose un coussin et une plateforme de forte épaisseur, rien de mieux pour réaliser des séances de musculation intenses et sans gêne !\n\nUltra- polyvalent : Vous pourrez effectuer une multitude d'exercices sur notre banc de musculation. Il est également possible de placer des bandes élastiques de part et d'autre du Power Bench grâce aux supports de fixation.\n\nVoici quelques exemples d'exercices réalisables avec le banc de sport multi-fonctions : \n\nHip Trust : Fessier\nCrunch & Dragon Flag : Abdominaux\nNordic Ham Curls : Ischio - jambier & Fessier\nFentes Bulgares : Fessier & Quadriceps\nPompes : Pectoraux\nBox Step Up : Fessier, Quadriceps & Ischio - jambiers\nTirage Bûcheron : Dos\nPistol Squat : Fessier & Quadriceps\nRowing avec Bandes Élastiques : Grand Dorsal\nCharge maximale : 300 kg",
-  images: ["https://ericflag.com/cdn/shop/files/Bench1800x1800.jpg?v=1698311717", "https://ericflag.com/cdn/shop/products/Slide-Bar-1200x1200.jpg?v=1702655402", "https://ericflag.com/cdn/shop/products/slide-1800x-2.jpg?v=1702655402"],
-  comments: [{
-    id: '1',
-    nomUtilisateur: 'Sorin',
-    prenomUtilisateur: 'Audrey',
-    titre: "Une histoire d'amour... Tout bonnement",
-    contenu: "Les formes de cette ceinture épousent parfaitement le bas de mon dos. Je me sens supporté et encouragé à l'effort de haut en bas dans mes répétitions. Ca faisait longtemps que je n'avais pas pris autant de plaisir à pratiquer une activité sportive. Je recommande à 169 % !",
-    date: "29 janvier 2024",
-    note: 4,
-    images: ["https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png"]
-  },
-  {
-    id: '2',
-    nomUtilisateur: 'Sorin',
-    prenomUtilisateur: 'Anne',
-    titre: "Service client exceptionnel",
-    contenu: "Service client exceptionnel ! J'avais un soucis avec ma slide bar (causé par utilisateur, pas un défaut de production). J'ai contacté le service client et j'ai pu avoir des pièces détachés sans le moindre inconvénient, ce qui m'a permis du coup de réutiliser ma slide bar, me faire économiser de l'argent et de moins polluer finalement !",
-    date: "01 février 2024",
-    note: 5,
-    images: ["https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png"]
-  }, {
-    id: '3',
-    nomUtilisateur: 'Sorin',
-    prenomUtilisateur: 'Anthony',
-    titre: "Matériaux très qualitatifs",
-    contenu: "Matériaux très qualitatifs et gilet fonctionnel. Testé en pompes et rucking, très bonne expérience (moins de24 heures, mais je suis jusqu'à présent très satisfait des produits utilisés, ceinture et parallettes).",
-    date: "15 janvier 2024",
-    note: 5,
-    images: []
-  }]
+  id: 0,
+  title: "",
+  price: 0,
+  description: "",
+  category: "",
+  images: [],
+  comments: []
 })
 const quantity = ref(1);
 const noteAvg = ref(noteAvgCalc())
+const linkCopied = ref(false)
+const addedToCart = ref(false)
+
+fetch(`http://localhost:8080/api/v1/products/${route.query.id}`)
+  .then((res) => res.json())
+  .then((res) => {
+    product.value.id = res.id
+    product.value.title = res.title
+    product.value.price = res.price
+    product.value.description = res.description
+    product.value.images = res.images
+    product.value.category = res.category
+
+    fetch(`http://localhost:8080/api/v1/comments/${res.id}`)
+      .then((res2) => res2.json())
+      .then((res2) => {
+        res2.forEach((comment) => {
+          product.value.comments.push({
+            id: comment.id,
+            userLastname: comment.user.lastname,
+            userFirstname: comment.user.firstname,
+            titre: comment.title,
+            contenu: comment.content,
+            date: comment.date_time,
+            note: comment.note,
+            images: comment.images || []
+          })
+        })
+        noteAvg.value = noteAvgCalc()
+      })
+  })
 
 const defaultComment = {
   id: '1',
@@ -139,7 +164,7 @@ const defaultComment = {
   prenomUtilisateur: 'Audrey',
   titre: "",
   contenu: "",
-  date: new Date().toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' }),
+  date: "",
   note: 5,
   images: []
 }
@@ -164,6 +189,7 @@ function handleChangeFileInput(e) {
 }
 
 function publishComment() {
+  newComment.value.date = new Date()
   product.value.comments.push(newComment.value)
   newComment.value = { ...defaultComment };
   files.value = null;
@@ -172,5 +198,16 @@ function publishComment() {
 
 function noteAvgCalc() {
   return product.value.comments.reduce((total, next) => total + next.note, 0) / product.value.comments.length;
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(`http://localhost:3000/product?id=${product.value.id}`)
+  linkCopied.value = true;
+  setTimeout(() => linkCopied.value = false, 2000)
+}
+
+function addToCart() {
+  addedToCart.value = true;
+  setTimeout(() => addedToCart.value = false, 2000)
 }
 </script>

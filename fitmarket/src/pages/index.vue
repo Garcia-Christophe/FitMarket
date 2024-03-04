@@ -18,121 +18,100 @@
       <v-container>
         <v-card style="margin-top: 320px" flat>
           <!-- Tabs -->
-          <v-tabs v-model="tabActif" color="#D7473F" align-tabs="center">
-            <v-tab :value="1">Les plus récents</v-tab>
+          <v-tabs v-model="tab" color="#D7473F" align-tabs="center">
+            <v-tab :value="1">Ordre aléatoire</v-tab>
             <v-tab :value="2">Les mieux notés</v-tab>
-            <v-tab :value="3">Les plus demandés</v-tab>
+            <v-tab :value="3">Les plus commentés</v-tab>
             <v-tab :value="4">Ordre prix croissant</v-tab>
             <v-tab :value="5">Ordre prix décroissant</v-tab>
           </v-tabs>
 
           <!-- Contenu des tabs -->
-          <v-window v-model="tabActif">
+          <v-window v-model="tab">
             <v-window-item v-for="n in 5" :key="n" :value="n" :transition="true" style="width: 100%; padding: 0% 5%">
               <v-container fluid>
                 <v-row>
                   <v-col cols="12" sm="9">
-                    <ProductCards />
+                    <v-col v-if="filteredProducts.length" cols="12" sm="12">
+                      <v-row>
+                        <v-col sm="4" v-for="(product, i) in filteredProducts" :key="i">
+                          <v-card class="mx-auto product" max-width="344">
+                            <v-img class="product-card-img" :src="product.images?.[0]" height="200px" cover
+                              @click="() => $router.push('/product?id=' + product.id)"></v-img>
+                            <v-divider></v-divider>
+
+                            <v-card-title>
+                              {{ product.title }}
+                            </v-card-title>
+
+                            <v-card-actions>
+                              <p style="margin-left: 8px">{{ product.price }} €</p>
+                              <v-spacer></v-spacer>
+                              <v-btn size="small" color="surface-radiant" variant="text" icon="mdi-cart"
+                                @click="addToCart"></v-btn>
+                              <v-btn size="small" color="surface-radiant" variant="text" icon="mdi-link"
+                                @click="() => copyLink(product.id)"></v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                    </v-col>
+                    <p v-else sm="4" style="font-size: large; text-align: center; margin: 20px auto; font-weight: 500">
+                      Aucun résultat ne correspond aux filtres appliqués
+                    </p>
                   </v-col>
 
                   <v-col cols="12" sm="3" style="justify-content: center">
-                    <!-- Catégories -->
-                    <v-toolbar color="transparent">
-                      Catégories
-                      <v-spacer></v-spacer>
-                      <v-btn :icon="categoriesOpen ? 'mdi-chevron-down' : 'mdi-chevron-up'"
-                        v-on:click="categoriesOpen = !categoriesOpen"></v-btn>
-                    </v-toolbar>
-                    <v-row v-if="categoriesOpen">
-                      <v-col cols="12" sm="6" md="6">
-                        <v-checkbox v-model="ex4" label="Sofas" color="info" value="success" hide-details>
-                        </v-checkbox>
-                        <v-checkbox v-checkbox v-model="ex4" label="Bethrooms" color="info" value="info"
-                          hide-details></v-checkbox>
-                        <v-checkbox v-checkbox v-model="ex4" label="Beds" color="info" value="red" hide-details>
-                        </v-checkbox>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="6">
-                        <v-checkbox v-model="ex5" label="Sofas" color="info" value="success" hide-details>
-                        </v-checkbox>
-                        <v-checkbox v-checkbox v-model="ex5" label="Bethrooms" color="info" value="info"
-                          hide-details></v-checkbox>
-                        <v-checkbox v-checkbox v-model="ex5" label="Beds" color="info" value="red" hide-details>
-                        </v-checkbox>
-                      </v-col>
-                    </v-row>
+                    <v-alert variant="outlined" style="border-color: #653253;">
+                      <div
+                        style="width: 90%; margin: auto; display: flex; flex-direction: column; justify-content: center;">
+                        <p style="text-align: center; font-size: x-large">
+                          <v-icon icon="mdi mdi-filter-check-outline"></v-icon>
+                          Filtres
+                        </p>
 
-                    <!-- Couleurs -->
-                    <v-toolbar color="transparent">
-                      Couleurs
-                      <v-spacer></v-spacer>
-                      <v-btn :icon="colorsOpen ? 'mdi-chevron-down' : 'mdi-chevron-up'"
-                        v-on:click="colorsOpen = !colorsOpen"></v-btn>
-                    </v-toolbar>
-                    <v-col v-if="colorsOpen">
-                      <v-row>
-                        <v-avatar color="grey" class="ml-1"></v-avatar>
-                        <v-avatar color="#DBEBCE" class="ml-1"></v-avatar>
-                        <v-avatar color="#EBDFD1" class="ml-1"></v-avatar>
-                        <v-avatar color="#E6C5B8" class="ml-1"></v-avatar>
-                        <v-avatar color="#D5CAB4" class="ml-1"></v-avatar>
-                        <v-avatar color="#E6C5B8" class="ml-1"></v-avatar>
-                      </v-row>
-                      <v-row>
-                        <v-avatar color="#E0E1E0" class="ml-1 mt-3"></v-avatar>
-                        <v-avatar color="#E2BAB6" class="ml-1 mt-3"></v-avatar>
-                        <v-avatar color="#CCD0E0" class="ml-1 mt-3"></v-avatar>
-                        <v-avatar color="#8B9DC2" class="ml-1 mt-3"></v-avatar>
-                        <v-avatar color="#959DB6" class="ml-1 mt-3"></v-avatar>
-                        <v-avatar color="#CFE7EB" class="ml-1 mt-3"></v-avatar>
-                      </v-row>
-                    </v-col>
+                        <!-- Catégories -->
+                        <v-toolbar color="transparent">
+                          Catégories
+                          <v-spacer></v-spacer>
+                          <v-btn :icon="categoriesOpen ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+                            v-on:click="categoriesOpen = !categoriesOpen"></v-btn>
+                        </v-toolbar>
+                        <v-row v-if="categoriesOpen">
+                          <v-col cols="12" sm="6" md="6">
+                            <v-checkbox v-model="equipment" label="Équipement" color="#653253" hide-details />
+                            <v-checkbox v-model="nutrition" label="Nutrition" color="#653253" hide-details />
+                          </v-col>
+                          <v-col cols="12" sm="6" md="6">
+                            <v-checkbox v-model="clothes" label="Vêtements" color="#653253" hide-details />
+                            <v-checkbox v-model="classes" label="Cours" color="#653253" hide-details />
+                          </v-col>
+                        </v-row>
 
-                    <!-- Matériels -->
-                    <v-toolbar color="transparent">
-                      Matériels
-                      <v-spacer></v-spacer>
-                      <v-btn :icon="materialsOpen ? 'mdi-chevron-down' : 'mdi-chevron-up'"
-                        v-on:click="materialsOpen = !materialsOpen"></v-btn>
-                    </v-toolbar>
-                    <v-row v-if="materialsOpen">
-                      <v-col cols="12" sm="6" md="6">
-                        <v-checkbox v-model="ex4" label="Wood" color="success" value="success" hide-details></v-checkbox>
-                        <v-checkbox v-model="ex4" label="Metal" color="success" value="info" hide-details></v-checkbox>
-                        <v-checkbox v-model="ex4" label="Leathers" color="success" value="red" hide-details></v-checkbox>
-                      </v-col>
-                      <v-col cols="12" sm="6" md="6">
-                        <v-checkbox v-model="ex5" label="Fabrics" color="success" value="success"
-                          hide-details></v-checkbox>
-                        <v-checkbox v-model="ex5" label="Bethrooms" color="success" value="info"
-                          hide-details></v-checkbox>
-                        <v-checkbox v-model="ex5" label="Beds" color="success" value="red" hide-details></v-checkbox>
-                      </v-col>
-                    </v-row>
+                        <!-- Notes -->
+                        <v-toolbar color="transparent">
+                          Note minimum
+                          <v-spacer></v-spacer>
+                          <v-btn :icon="noteOpen ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+                            v-on:click="noteOpen = !noteOpen"></v-btn>
+                        </v-toolbar>
+                        <v-rating v-if="noteOpen" v-model="noteMin" color="yellow-darken-3" hover></v-rating>
 
-                    <!-- Notes -->
-                    <v-toolbar color="transparent">
-                      Note minimum
-                      <v-spacer></v-spacer>
-                      <v-btn :icon="noteOpen ? 'mdi-chevron-down' : 'mdi-chevron-up'"
-                        v-on:click="noteOpen = !noteOpen"></v-btn>
-                    </v-toolbar>
-                    <v-rating v-if="noteOpen" v-model="noteMin" color="yellow-darken-3" hover></v-rating>
+                        <!-- Prix maximum -->
+                        <v-toolbar color="transparent">
+                          Prix
+                          <v-spacer></v-spacer>
+                          <v-btn :icon="priceOpen ? 'mdi-chevron-down' : 'mdi-chevron-up'"
+                            v-on:click="priceOpen = !priceOpen"></v-btn>
+                        </v-toolbar>
+                        <v-range-slider v-if="priceOpen" v-model="price" :step="1" :min="rangeMin" :max="rangeMax"
+                          thumb-label="always" color="#653253" style="margin-top: 20px"></v-range-slider>
 
-                    <!-- Prix maximum -->
-                    <v-toolbar color="transparent">
-                      Prix
-                      <v-spacer></v-spacer>
-                      <v-btn :icon="priceOpen ? 'mdi-chevron-down' : 'mdi-chevron-up'"
-                        v-on:click="priceOpen = !priceOpen"></v-btn>
-                    </v-toolbar>
-                    <v-range-slider v-if="priceOpen" v-model="rangePrix" :step="1" :min="rangeMin" :max="rangeMax"
-                      thumb-label="always" color="#653253" style="margin-top: 20px"></v-range-slider>
-
-                    <v-btn append-icon="mdi mdi-filter-check-outline"
-                      style="width: 60%; margin: 5% 20%; background: #653253; color: white">
-                      Filtrer
-                    </v-btn>
+                        <!-- Bouton Filtrer -->
+                        <v-btn prepend-icon="mdi mdi-filter-check-outline" color="#653253" v-on:click="sortProducts"
+                          style="margin-bottom: 20px">Filtrer</v-btn>
+                      </div>
+                    </v-alert>
                   </v-col>
                 </v-row>
               </v-container>
@@ -140,6 +119,25 @@
           </v-window>
         </v-card>
       </v-container>
+
+      <v-snackbar v-model="addedToCart" :timeout="2000" elevation="24">
+        Produit ajouté au panier !
+
+        <template v-slot:actions>
+          <v-btn color="#D56F97" variant="text" @click="addedToCart = false">
+            Fermer
+          </v-btn>
+        </template>
+      </v-snackbar>
+      <v-snackbar v-model="linkCopied" :timeout="2000" elevation="24">
+        Lien copié dans le presse-papier !
+
+        <template v-slot:actions>
+          <v-btn color="#D56F97" variant="text" @click="linkCopied = false">
+            Fermer
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
 
     <!-- Meilleurs avis -->
@@ -165,9 +163,8 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import NavBar from "@/components/NavBar.vue"
-import ProductCards from "@/components/ProductCards.vue"
 import BestComments from "@/components/BestComments.vue"
 import Footer from "@/components/Footer.vue"
 
@@ -176,45 +173,21 @@ window.addEventListener('scroll', handleScroll);
 const navBarBg = ref(window.scrollY > 0 ? '#D7473F' : 'transparent')
 
 const categoriesOpen = ref(true)
-const colorsOpen = ref(true)
-const materialsOpen = ref(true)
 const noteOpen = ref(true)
 const priceOpen = ref(true)
-
-const tabActif = ref(1);
+const tab = ref(1)
+const equipment = ref(true)
+const nutrition = ref(true)
+const clothes = ref(true)
+const classes = ref(true)
 const noteMin = ref(1)
-const rangeMin = 0
-const rangeMax = 500
-const rangePrix = ref([rangeMin, rangeMax])
+const [rangeMin, rangeMax] = [0, 500]
+const price = ref([rangeMin, rangeMax])
 
-const ex4 = ref([
-  "red",
-  "indigo",
-  "orange",
-  "primary",
-  "secondary",
-  "success",
-  "info",
-  "warning",
-  "error",
-  "red darken-3",
-  "indigo darken-3",
-  "orange darken-3",
-])
-const ex5 = ref([
-  "red",
-  "indigo",
-  "orange",
-  "primary",
-  "secondary",
-  "success",
-  "info",
-  "warning",
-  "error",
-  "red darken-3",
-  "indigo darken-3",
-  "orange darken-3",
-])
+watch(tab, sortProducts)
+
+const addedToCart = ref(false)
+const linkCopied = ref(false)
 
 const partners = ref([{
   name: "Nike",
@@ -269,6 +242,64 @@ const partners = ref([{
   logo: "https://www.nouvelobs.com/codepromo/static/shop/37464/logo/code-promo-gorilla-sports.png",
   url: "https://www.gorillasports.fr/",
 }])
+const allProducts = ref([])
+const filteredProducts = ref([])
+
+fetch('http://localhost:8080/api/v1/products')
+  .then((res) => res.json())
+  .then((res) => allProducts.value.push(...res.sort(() => Math.random() - 0.5)) && sortProducts())
+
+async function sortProducts() {
+  let filteredProductsTmp = [...allProducts.value]
+
+  // Catégories
+  if (!equipment.value) {
+    filteredProductsTmp = filteredProductsTmp.filter((product) => product.category !== 'EQUIPMENT')
+  }
+  if (!nutrition.value) {
+    filteredProductsTmp = filteredProductsTmp.filter((product) => product.category !== 'NUTRITION')
+  }
+  if (!clothes.value) {
+    filteredProductsTmp = filteredProductsTmp.filter((product) => product.category !== 'CLOTHES')
+  }
+  if (!classes.value) {
+    filteredProductsTmp = filteredProductsTmp.filter((product) => product.category !== 'CLASSES')
+  }
+
+  // Note
+  const asyncFilter = async (predicate) => Promise.all(filteredProductsTmp.map(predicate))
+    .then((results) => filteredProductsTmp.filter((_, i) => results[i]))
+
+  filteredProductsTmp = await asyncFilter(async (product) => {
+    const comments = await (await fetch(`http://localhost:8080/api/v1/comments/${product.id}`)).json()
+    product.nbComments = comments.length
+    product.noteAvg = (comments.reduce((sum, comment) => sum + comment.note, 0) / comments.length) || 1
+    return product.noteAvg >= noteMin.value
+  })
+
+  // Prix
+  filteredProductsTmp = filteredProductsTmp.filter((product) => product.price >= price.value[0] && product.price <= price.value[1])
+
+  // Onglet
+  if (tab.value === 1) {
+    // Ordre aléatoire
+    filteredProductsTmp = filteredProductsTmp.sort(() => Math.random() - 0.5)
+  } else if (tab.value === 2) {
+    // Les mieux notés
+    filteredProductsTmp = filteredProductsTmp.sort((a, b) => b.noteAvg - a.noteAvg)
+  } else if (tab.value === 3) {
+    // Les plus commentés
+    filteredProductsTmp = filteredProductsTmp.sort((a, b) => b.nbComments - a.nbComments)
+  } else if (tab.value === 4) {
+    // Ordre prix croissant
+    filteredProductsTmp = filteredProductsTmp.sort((a, b) => a.price - b.price)
+  } else if (tab.value === 5) {
+    // Ordre prix décroissant
+    filteredProductsTmp = filteredProductsTmp.sort((a, b) => b.price - a.price)
+  }
+
+  filteredProducts.value = filteredProductsTmp
+}
 
 function scrollTo(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -276,6 +307,17 @@ function scrollTo(id) {
 
 function handleScroll() {
   navBarBg.value = window.scrollY > 0 ? '#D7473F' : 'transparent'
+}
+
+function copyLink(id) {
+  navigator.clipboard.writeText(`http://localhost:3000/product?id=${id}`)
+  linkCopied.value = true;
+  setTimeout(() => linkCopied.value = false, 2000)
+}
+
+function addToCart() {
+  addedToCart.value = true;
+  setTimeout(() => addedToCart.value = false, 2000)
 }
 </script>
 
@@ -289,5 +331,13 @@ function handleScroll() {
   bottom: -5px;
   width: 50%;
   justify-content: space-evenly;
+}
+
+.product:hover {
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 16px 0px, rgba(0, 0, 0, 0.19) 0px 6px 20px 0px !important
+}
+
+.product-card-img:hover {
+  cursor: pointer
 }
 </style>

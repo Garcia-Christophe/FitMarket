@@ -36,7 +36,7 @@
           <v-card-text class="white--text pt-0">
             <h3>Contact</h3>
           </v-card-text>
-          <v-card-text class="grey--text">52 rue Albert Louppe, 29200 Brest</v-card-text>
+          <v-card-text class="grey--text">6 Av. Victor Le Goergeu, 29200 Brest</v-card-text>
           <v-card-text class="grey--text mt-n4">contact@fitmarket.com</v-card-text>
           <v-card-text class="grey--text mt-n4">01 23 45 67 89</v-card-text>
         </v-col>
