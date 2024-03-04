@@ -1,0 +1,31 @@
+# Image gradle avec le jdk17
+image: gradle:7.3.3-jdk17-alpine
+
+# Etapes du pipeline
+stages:
+  - ⚙️ Build
+  - 🧪 Test
+  - 🚀 Deploy
+
+# Build
+build-job:
+  stage: ⚙️ Build
+  script:
+    - echo "Compilation du code..."
+    - echo "Compilation terminée."
+
+# Test : web
+test-web:
+  stage: 🧪 Test
+  allow_failure: false
+  script:
+    - echo "Tests de la partie web..."
+    - if grep -q "port: 3000" ./fitmarket/vite.config.mjs; then echo "Le port de l'application web est bien 3000."; else echo "Le port de l'application web n'est pas 3000 !"; exit 1 fi
+
+# Deploy
+deploy-job:
+  stage: 🚀 Deploy
+  environment: production
+  script:
+    - echo "Déploiement de l'application..."
+    - echo "Application déployée avec succès."
