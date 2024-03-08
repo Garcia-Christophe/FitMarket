@@ -6,8 +6,6 @@ import dto.fitmarketapi.Product;
 
 public class ProductMapper {
     public static Product toDto(ProductEntity entity) {
-
-        System.out.println("dto");
         Product dto = new Product();
         dto.setId(entity.getId());
         dto.setTitle(entity.getTitle());
@@ -20,7 +18,6 @@ public class ProductMapper {
     }
 
     public static ProductEntity toEntity(Product dto) {
-        System.out.println("entity");
         ProductEntity entity = new ProductEntity();
         entity.setId(dto.getId());
         entity.setTitle(dto.getTitle());

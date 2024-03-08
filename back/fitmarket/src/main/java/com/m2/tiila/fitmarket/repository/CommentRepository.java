@@ -65,7 +65,6 @@ public class CommentRepository {
         this.jdbcTemplate.update(SQL_CREATE_COMMENT, new MapSqlParameterSource(params), generatedKeyHolder);
         var paramComment = new HashMap<String, Object>();
         Integer id = (Integer) generatedKeyHolder.getKeys().get("ID");
-        System.out.println("ID = " + id);
         paramComment.put("id",id);
 
         for(String i : dto.getImages()){
