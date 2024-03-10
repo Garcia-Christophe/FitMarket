@@ -24,29 +24,11 @@ public class ClasseBusiness {
 
     public Classes getClasse(int id) {
         ClasseEntity c = this.classeRepository.getClasse(id);
-        int id_product = this.classeRepository.getIdProduct(id);
-        Product p = toDto(this.productRepository.getProduct(id_product));
-        c.setProduct(p);
         return toDto(c);
-    }
-
-    public List<Classes> getClasses() {
-        List<ClasseEntity> classesEntity = this.classeRepository.getClasses();
-        for(ClasseEntity c : classesEntity){
-            int id_product = this.classeRepository.getIdProduct(c.getId());
-            Product p = toDto(this.productRepository.getProduct(id_product));
-            c.setProduct(p);
-        }
-        return classesEntity.stream().map(ClasseMapper::toDto).toList();
     }
 
     public List<Classes> getClassesByUserId(int id){
         List<ClasseEntity> classesEntity = this.classeRepository.getClassesByUserId(id);
-        for(ClasseEntity c : classesEntity){
-            int id_product = this.classeRepository.getIdProduct(c.getId());
-            Product p = toDto(this.productRepository.getProduct(id_product));
-            c.setProduct(p);
-        }
         return classesEntity.stream().map(ClasseMapper::toDto).toList();
     }
 }

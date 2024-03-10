@@ -49,13 +49,14 @@ public class OrderController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createComment(@PathParam("idUser") Integer idUser,Order order){
-       //try{
-        this.orderBusiness.updateOrder(idUser, toEntity(order));
-        return Response.ok("Commentaire ajouté.").build();
-      /* }catch (Exception e){
-        BadRequestException badRequestException =  new BadRequestException();
-        return badRequestException.toResponse(Response.Status.BAD_REQUEST, "Modification du panier impossible.");
-       }*/
+    public Response updateOrder(@PathParam("idUser") Integer idUser,Order order){
+        try{
+            this.orderBusiness.updateOrder(idUser, toEntity(order));
+            return Response.ok("Commande ajouté.").build();
+        }catch (Exception e){
+            BadRequestException badRequestException =  new BadRequestException();
+            return badRequestException.toResponse(Response.Status.BAD_REQUEST, "Modification du panier impossible.");
+        }
+
     }
 }
