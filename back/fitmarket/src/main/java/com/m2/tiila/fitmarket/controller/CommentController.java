@@ -25,12 +25,12 @@ public class CommentController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getCommentsByProduct(@PathParam("idProduct") Integer idProduct){
-        try {
+       try {
             return Response.ok(this.commentBusiness.getCommentsByProduct(idProduct)).build();
-        }catch(Exception e){
-            BadRequestException badRequestException =  new BadRequestException();
-            return badRequestException.toResponse(Response.Status.NOT_FOUND, "Aucun commentaires pour le produit avec l'id : "+idProduct);
-        }
+       }catch(Exception e) {
+           BadRequestException badRequestException = new BadRequestException();
+           return badRequestException.toResponse(Response.Status.NOT_FOUND, "Aucun commentaires pour le produit avec l'id : " + idProduct);
+       }
     }
 
     @Path("/best")

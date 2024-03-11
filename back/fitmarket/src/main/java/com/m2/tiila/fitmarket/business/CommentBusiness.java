@@ -24,42 +24,16 @@ import static com.m2.tiila.fitmarket.mapper.UserMapper.toDto;
 public class CommentBusiness {
     @Inject
     private CommentRepository commentRepository;
-    @Inject
-    private ProductRepository productRepository;
-    @Inject
-    private UserRepository userRepository;
 
     public List<Comment> getCommentsByProduct(Integer idProduct) {
         List<CommentEntity> res = this.commentRepository.getCommentsByProduct(idProduct);
-        List<Comment> resDTO = new ArrayList<>();
-        for (CommentEntity ce : res){
-            ce.setProduct(getProductByComment(ce));
-            ce.setUser(getMemberByComment(ce));
-            resDTO.add(toDto(ce));
-        }
-        return resDTO;
+        return res.stream().map(CommentMapper::toDto).toList();
     }
 
     public List<Comment> getBestComments() {
         List<CommentEntity> res = this.commentRepository.getBestComments();
         List<CommentEntity> cinqPremiers = res.subList(0, Math.min(res.size(), 5));
-        List<Comment> resDTO = new ArrayList<>();
-        for (CommentEntity ce : cinqPremiers){
-            ce.setProduct(getProductByComment(ce));
-            ce.setUser(getMemberByComment(ce));
-            resDTO.add(toDto(ce));
-        }
-        return resDTO;
-    }
-
-    private Member getMemberByComment(CommentEntity commentEntity){
-        int idMember = this.commentRepository.getIdMemberByComment(commentEntity.getId());
-        return toDto(userRepository.getUserById(idMember));
-    }
-
-    private Product getProductByComment(CommentEntity commentEntity){
-        int idProduct = this.commentRepository.getIdProductByComment(commentEntity.getId());
-        return toDto(productRepository.getProduct(idProduct));
+        return cinqPremiers.stream().map(CommentMapper::toDto).toList();
     }
 
     public void createComment(CommentEntity commentEntity) {

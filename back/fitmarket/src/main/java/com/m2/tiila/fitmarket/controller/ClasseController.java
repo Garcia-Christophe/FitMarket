@@ -22,12 +22,12 @@ public class ClasseController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Response getClasse(@PathParam("id") Integer id) {
-        //try {
+        try {
             return Response.ok(this.classeBusiness.getClasse(id)).build();
-        /*}catch(Exception e){
+        }catch(Exception e){
             BadRequestException badRequestException =  new BadRequestException();
             return badRequestException.toResponse(Response.Status.NOT_FOUND, "Aucun cours trouvé avec l'id : "+id);
-        }*/
+        }
     }
 
     @GET
@@ -35,11 +35,11 @@ public class ClasseController {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/user/{id}")
     public Response getClassesByUserId(@PathParam("id") Integer id) {
-        //try {
+        try {
             return Response.ok(this.classeBusiness.getClassesByUserId(id)).build();
-        /*}catch(Exception e){
+        }catch(Exception e){
             BadRequestException badRequestException =  new BadRequestException();
             return badRequestException.toResponse(Response.Status.NOT_FOUND, "Aucun cours trouvé pour l'utilisateur : "+id);
-        }*/
+        }
     }
 }
