@@ -85,8 +85,7 @@ function handleCollapse() {
 }
 
 function isConnected() {
-  console.log(localStorage.getItem('connected'))
-  return localStorage.getItem('connected')
+  return localStorage.getItem('connectedUser')
 }
 </script>
 

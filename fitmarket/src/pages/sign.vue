@@ -101,16 +101,16 @@
                           </p>
                           <v-form style="display: flex; flex-direction: column; gap: 20px">
                             <v-row style="display: flex; gap: 20px">
-                              <v-text-field label="Nom" name="nom" prepend-icon="mdi-card-account-details" type="text"
-                                color="#D7473F" />
-                              <v-text-field label="Prénom" name="prenom" prepend-icon="mdi-card-account-details"
-                                type="text" color="#D7473F" />
+                              <v-text-field v-model="signUpUser.lastname" label="Nom" name="lastname"
+                                prepend-icon="mdi-card-account-details" type="text" color="#D7473F" />
+                              <v-text-field v-model="signUpUser.firstname" label="Prénom" name="firstname"
+                                prepend-icon="mdi-card-account-details" type="text" color="#D7473F" />
                             </v-row>
                             <v-row style="display: flex; gap: 20px">
-                              <v-text-field label="Adresse email" name="email" prepend-icon="mdi-email" type="email"
-                                color="#D7473F" />
-                              <v-text-field label="Mot de passe" name="password" prepend-icon="mdi-lock" type="password"
-                                color="#D7473F" />
+                              <v-text-field v-model="signUpUser.email" label="Adresse email" name="email"
+                                prepend-icon="mdi-email" type="email" color="#D7473F" />
+                              <v-text-field v-model="signUpUser.password" label="Mot de passe" name="password"
+                                prepend-icon="mdi-lock" type="password" color="#D7473F" />
                             </v-row>
                           </v-form>
                         </div>
@@ -129,6 +129,28 @@
         </v-row>
       </v-container>
     </v-main>
+
+    <!-- Notification mauvais remplissage du formulaire -->
+    <v-snackbar v-model="wrongConnexion" :timeout="2000" elevation="24">
+      <div class="text-subtitle-1 pb-2">Connexion impossible !</div>
+      <p>Mauvais mot de passe ou adresse email inconnue.</p>
+
+      <template v-slot:actions>
+        <v-btn color="#D56F97" variant="text" @click="wrongConnexion = false">
+          Fermer
+        </v-btn>
+      </template>
+    </v-snackbar>
+    <v-snackbar v-model="wrongInscription" :timeout="2000" elevation="24">
+      <div class="text-subtitle-1 pb-2">Inscription impossible !</div>
+      <p>Champs de formulaire manquant ou adresse email déjà utilisée.</p>
+
+      <template v-slot:actions>
+        <v-btn color="#D56F97" variant="text" @click="wrongInscription = false">
+          Fermer
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -141,23 +163,68 @@ const signInUser = ref({
   email: null,
   password: null,
 })
+const signUpUser = ref({
+  firstname: null,
+  lastname: null,
+  email: null,
+  password: null,
+})
+const wrongConnexion = ref(false)
+const wrongInscription = ref(false)
 
 async function signIn() {
-  const result = await (await fetch('http://localhost:8080/api/v1/sign/in', {
+  const data = await fetch('http://localhost:8080/api/v1/sign/in', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      "email": "john.smith@email.com",
-      "password": "motdepasse1"
-    })
-  })).json()
-  console.log(result);
+    body: JSON.stringify(signInUser.value)
+  })
+
+  if (data.ok) {
+    const connectedUser = await data.json()
+    // Ajout de l'utilisateur dans le localStorage
+    localStorage.setItem('connectedUser', JSON.stringify(connectedUser));
+    document.location.href = '/account';
+
+    signInUser.value.email = null
+    signInUser.value.password = null
+  } else {
+    // Informe l'utilisateur de mauvais identifiants
+    wrongConnexion.value = true;
+    setTimeout(() => wrongConnexion.value = false, 5000)
+  }
 }
 
 async function signUp() {
-  // 
+  let data = { ok: false };
+
+  if (signUpUser.value.email && signUpUser.value.firstname && signUpUser.value.lastname && signUpUser.value.password) {
+    data = await fetch('http://localhost:8080/api/v1/sign/up', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(signUpUser.value)
+    })
+  }
+
+  if (data.ok) {
+    // Connecte l'utilisateur
+    signInUser.value.email = signUpUser.value.email
+    signInUser.value.password = signUpUser.value.password
+    signIn();
+
+    signUpUser.value.firstname = null
+    signUpUser.value.lastname = null
+    signUpUser.value.email = null
+    signUpUser.value.password = null
+  } else {
+    // Informe l'utilisateur de mauvais identifiants
+    wrongInscription.value = true;
+    setTimeout(() => wrongInscription.value = false, 5000)
+  }
 }
 </script>

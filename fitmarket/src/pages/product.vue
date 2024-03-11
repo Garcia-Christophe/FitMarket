@@ -7,8 +7,8 @@
       <div id="div-wrap" style="display: flex; gap: 50px; justify-content: center;">
         <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; flex-shrink: 1;">
           <!-- Images -->
-          <img :src="product.images[idxImg]" style="object-fit: cover; max-width: 600px; width: 100%;">
-          <v-btn v-if="product.images.length > 1" elevation="0" v-on:click="nextImage()"><u>Prochaine image</u></v-btn>
+          <img :src="product.images?.[idxImg]" style="object-fit: cover; max-width: 600px; width: 100%;">
+          <v-btn v-if="product.images?.length > 1" elevation="0" v-on:click="nextImage()"><u>Prochaine image</u></v-btn>
 
           <!-- actions -->
           <div style="display: flex; justify-content: space-evenly; margin: 20px 0; flex-wrap: wrap; column-gap: 20px;">
@@ -48,7 +48,7 @@
             <p style="font-size: x-large;">{{ product.price }}&nbsp;€</p>
             <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap;">
               <v-rating :model-value="noteAvg" color="yellow-darken-3" readonly half-increments></v-rating>
-              <p>({{ product.comments.length }} avis)</p>
+              <p>({{ comments.length }} avis)</p>
             </div>
           </div>
 
@@ -66,14 +66,13 @@
           Explorez les retours d'expérience de nos clients fidèles !
         </p>
 
-        <div v-if="product.comments.length"
-          style="display: flex; flex-direction: column; gap: 50px; margin-bottom: 50px;">
-          <ProductComment v-for="( comment, i ) in  product.comments " :key="i" :comment="comment" />
+        <div v-if="comments.length" style="display: flex; flex-direction: column; gap: 50px; margin-bottom: 50px;">
+          <ProductComment v-for="( comment, i ) in  comments " :key="i" :comment="comment" />
         </div>
       </div>
 
       <!-- formulaire d'ajout d'un commentaire -->
-      <v-card>
+      <v-card v-if="isConnected()">
         <v-card-text style="display: flex; flex-direction: column; gap: 20px">
           <p style="font-size: x-large; text-align: center; margin: 20px auto;">
             Ajoutez un commentaire !
@@ -86,19 +85,30 @@
               <v-rating v-model="newComment.note" color="yellow-darken-3" hover></v-rating>
             </div>
             <v-text-field label="Titre" prepend-icon="mdi-format-title" type="text" color="#D7473F"
-              v-model="newComment.titre" />
-            <v-textarea label="Message" prepend-icon="mdi-text-long" color="#D7473F" v-model="newComment.contenu" />
+              v-model="newComment.title" />
+            <v-textarea label="Message" prepend-icon="mdi-text-long" color="#D7473F" v-model="newComment.content" />
             <v-file-input id="file-input" accept="image/*" label="Photos" multiple chips
               v-on:change="handleChangeFileInput" v-model="files"></v-file-input>
 
             <!-- Bouton Se connecter -->
             <div style="display: flex; flex-direction: column; width: 15%; margin: auto">
-              <v-btn rounded color="#D7473F" v-on:click="publishComment()">PUBLIER</v-btn>
+              <v-btn rounded color="#D7473F" v-on:click="publishComment">PUBLIER</v-btn>
             </div>
           </v-form>
         </v-card-text>
       </v-card>
     </v-main>
+
+    <!-- Notification champs manquants nouveau commentaire -->
+    <v-snackbar v-model="missingFiels" :timeout="2000" elevation="24">
+      Veuillez saisir un titre et un message !
+
+      <template v-slot:actions>
+        <v-btn color="#D56F97" variant="text" @click="missingFiels = false">
+          Fermer
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -121,9 +131,9 @@ const product = ref({
   price: 0,
   description: "",
   category: "",
-  images: [],
-  comments: []
+  images: []
 })
+const comments = ref([])
 const quantity = ref(1);
 const noteAvg = ref(noteAvgCalc())
 const linkCopied = ref(false)
@@ -143,13 +153,12 @@ fetch(`http://localhost:8080/api/v1/products/${route.query.id}`)
       .then((res2) => res2.json())
       .then((res2) => {
         res2.forEach((comment) => {
-          product.value.comments.push({
+          comments.value.push({
             id: comment.id,
-            userLastname: comment.user.lastname,
-            userFirstname: comment.user.firstname,
-            titre: comment.title,
-            contenu: comment.content,
-            date: comment.date_time,
+            user: comment.user,
+            title: comment.title,
+            content: comment.content,
+            date_time: comment.date_time,
             note: comment.note,
             images: comment.images || []
           })
@@ -159,17 +168,15 @@ fetch(`http://localhost:8080/api/v1/products/${route.query.id}`)
   })
 
 const defaultComment = {
-  id: '1',
-  nomUtilisateur: 'Sorin',
-  prenomUtilisateur: 'Audrey',
-  titre: "",
-  contenu: "",
-  date: "",
+  title: "",
+  content: "",
+  date_time: "",
   note: 5,
   images: []
 }
 
 const newComment = ref({ ...defaultComment })
+const missingFiels = ref(false)
 
 function nextImage() {
   idxImg.value = idxImg.value === product.value.images.length - 1 ? 0 : idxImg.value + 1;
@@ -188,16 +195,53 @@ function handleChangeFileInput(e) {
   })
 }
 
-function publishComment() {
-  newComment.value.date = new Date()
-  product.value.comments.push(newComment.value)
-  newComment.value = { ...defaultComment };
-  files.value = null;
-  noteAvg.value = noteAvgCalc()
+async function publishComment() {
+  if (newComment.value.title && newComment.value.content) {
+    // Définition de la date, du user et du produit
+    newComment.value.date_time = new Date()
+    newComment.value.user = { ...JSON.parse(localStorage.getItem('connectedUser')) }
+    newComment.value.product = { ...product.value }
+
+    // Ajout du commentaire
+    const data = await fetch('http://localhost:8080/api/v1/comments', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        content: newComment.value.content,
+        date_time: new Date(newComment.value.date_time).toISOString().slice(0, 19).replace('T', ' '),
+        images: newComment.value.images,
+        note: newComment.value.note,
+        title: newComment.value.title,
+        product: {
+          id: product.value.id,
+        },
+        user: {
+          lastname: JSON.parse(localStorage.getItem('connectedUser')).lastname,
+          firstname: JSON.parse(localStorage.getItem('connectedUser')).firstname,
+          email: JSON.parse(localStorage.getItem('connectedUser')).email,
+          password: JSON.parse(localStorage.getItem('connectedUser')).password,
+        }
+      })
+    })
+    if (data.ok) {
+      comments.value.push(newComment.value)
+
+      // Reset + recalcul de la note moyenne
+      newComment.value = { ...defaultComment };
+      files.value = null;
+      noteAvg.value = noteAvgCalc()
+    }
+  } else {
+    missingFiels.value = true;
+    setTimeout(() => missingFiels.value = false, 5000)
+  }
 }
 
 function noteAvgCalc() {
-  return product.value.comments.reduce((total, next) => total + next.note, 0) / product.value.comments.length;
+  return comments.value.reduce((total, next) => total + next.note, 0) / comments.value.length;
 }
 
 function copyLink() {
@@ -209,5 +253,9 @@ function copyLink() {
 function addToCart() {
   addedToCart.value = true;
   setTimeout(() => addedToCart.value = false, 2000)
+}
+
+function isConnected() {
+  return localStorage.getItem('connectedUser')
 }
 </script>

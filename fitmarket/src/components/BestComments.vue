@@ -22,50 +22,59 @@ import ProductComment from '@/components/ProductComment.vue';
 
 const comments = ref([{
   id: '1',
-  nomUtilisateur: 'Sorin',
-  prenomUtilisateur: 'Audrey',
-  titre: "Une histoire d'amour... Tout bonnement",
-  contenu: "Les formes de cette ceinture épousent parfaitement le bas de mon dos. Je me sens supporté et encouragé à l'effort de haut en bas dans mes répétitions. Ca faisait longtemps que je n'avais pas pris autant de plaisir à pratiquer une activité sportive. Je recommande à 169 % !",
-  date: "29 janvier 2024",
+  user: {
+    firstname: 'Alexia',
+    lastname: 'Sorin',
+  },
+  titme: "Une histoire d'amour... Tout bonnement",
+  content: "Les formes de cette ceinture épousent parfaitement le bas de mon dos. Je me sens supporté et encouragé à l'effort de haut en bas dans mes répétitions. Ca faisait longtemps que je n'avais pas pris autant de plaisir à pratiquer une activité sportive. Je recommande à 169 % !",
+  date_time: "29 janvier 2024",
   note: 4,
   images: ["https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png"]
-},
-{
-  id: '2',
-  nomUtilisateur: 'Sorin',
-  prenomUtilisateur: 'Anne',
-  titre: "Service client exceptionnel",
-  contenu: "Service client exceptionnel ! J'avais un soucis avec ma slide bar (causé par utilisateur, pas un défaut de production). J'ai contacté le service client et j'ai pu avoir des pièces détachés sans le moindre inconvénient, ce qui m'a permis du coup de réutiliser ma slide bar, me faire économiser de l'argent et de moins polluer finalement !",
-  date: "01 février 2024",
-  note: 5,
-  images: ["https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png"]
 }, {
-  id: '3',
-  nomUtilisateur: 'Sorin',
-  prenomUtilisateur: 'Anthony',
-  titre: "Matériaux très qualitatifs",
-  contenu: "Matériaux très qualitatifs et gilet fonctionnel. Testé en pompes et rucking, très bonne expérience (moins de24 heures, mais je suis jusqu'à présent très satisfait des produits utilisés, ceinture et parallettes).",
-  date: "15 janvier 2024",
-  note: 5,
-  images: []
-}, {
-  id: '4',
-  nomUtilisateur: 'Sorin',
-  prenomUtilisateur: 'Alexia',
-  titre: "Juste parfait",
-  contenu: "Livré en temps et en heures, rien a dire bonne qualité. Et pour ceux qui en montant les parallettes découvrent que celles ci sont bancales, ce n'est pas un défaut de fabrication mais un problème de serrage de vos boulons, si c'est le cas ils suffit de serez le boulon du coté opposé du pieds qui ne touche pas le sol. Merci a FitMarket et son équipe pour ce matériel et pour la motivation et la simplicité des tutos pour le streetworkout. Bonne continuation",
-  date: "23 janvier 2024",
+  id: '1',
+  user: {
+    firstname: 'Alexia',
+    lastname: 'Sorin',
+  },
+  titme: "Une histoire d'amour... Tout bonnement",
+  content: "Les formes de cette ceinture épousent parfaitement le bas de mon dos. Je me sens supporté et encouragé à l'effort de haut en bas dans mes répétitions. Ca faisait longtemps que je n'avais pas pris autant de plaisir à pratiquer une activité sportive. Je recommande à 169 % !",
+  date_time: "29 janvier 2024",
   note: 4,
-  images: ["https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png"]
+  images: ["https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png"]
 }, {
-  id: '5',
-  nomUtilisateur: 'Sorin',
-  prenomUtilisateur: 'Pilou',
-  titre: "Jamais déçu",
-  contenu: "J'ai acheté plusieurs produits et ils répondent tous à mes attentes.",
-  date: "32 janvier 2024",
-  note: 5,
-  images: ["https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png"]
+  id: '1',
+  user: {
+    firstname: 'Alexia',
+    lastname: 'Sorin',
+  },
+  titme: "Une histoire d'amour... Tout bonnement",
+  content: "Les formes de cette ceinture épousent parfaitement le bas de mon dos. Je me sens supporté et encouragé à l'effort de haut en bas dans mes répétitions. Ca faisait longtemps que je n'avais pas pris autant de plaisir à pratiquer une activité sportive. Je recommande à 169 % !",
+  date_time: "29 janvier 2024",
+  note: 4,
+  images: ["https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png"]
+}, {
+  id: '1',
+  user: {
+    firstname: 'Alexia',
+    lastname: 'Sorin',
+  },
+  titme: "Une histoire d'amour... Tout bonnement",
+  content: "Les formes de cette ceinture épousent parfaitement le bas de mon dos. Je me sens supporté et encouragé à l'effort de haut en bas dans mes répétitions. Ca faisait longtemps que je n'avais pas pris autant de plaisir à pratiquer une activité sportive. Je recommande à 169 % !",
+  date_time: "29 janvier 2024",
+  note: 4,
+  images: ["https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png"]
+}, {
+  id: '1',
+  user: {
+    firstname: 'Alexia',
+    lastname: 'Sorin',
+  },
+  titme: "Une histoire d'amour... Tout bonnement",
+  content: "Les formes de cette ceinture épousent parfaitement le bas de mon dos. Je me sens supporté et encouragé à l'effort de haut en bas dans mes répétitions. Ca faisait longtemps que je n'avais pas pris autant de plaisir à pratiquer une activité sportive. Je recommande à 169 % !",
+  date_time: "29 janvier 2024",
+  note: 4,
+  images: ["https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png", "https://assets.roguefitness.com/f_auto,q_auto,c_limit,w_1536,b_rgb:f8f8f8/catalog/Straps%20Wraps%20and%20Support%20/Belts%20/Weightlifting/HDDLEVSD/HDDLEVSD-h_ylyzck.png"]
 }])
 </script>
 
