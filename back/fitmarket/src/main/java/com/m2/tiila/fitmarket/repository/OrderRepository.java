@@ -41,7 +41,7 @@ public class OrderRepository {
             "JOIN product p ON op.id_product = p.id " +
             "WHERE o.date_order IS NOT NULL AND m.id = :userId";
 
-    private final static String createOrder = "INSERT INTO orders (id_user, date_order) VALUES (:userId, :currentDateTime)";
+    private final static String createOrder = "INSERT INTO orders (id_user, date_order) VALUES (:userId, null)";
 
     private final static String insertQuery = "INSERT INTO order_product (id_order, id_product, quantity) VALUES (:orderId, :productId, :quantity)";
 
@@ -49,12 +49,14 @@ public class OrderRepository {
 
     private final static String deleteQuery = "DELETE FROM order_product WHERE id_order = :orderId AND id_product NOT IN (:productIds)";
 
+    private final static String deleteAllQuery = "DELETE FROM order_product WHERE id_order = :orderId";
+
     private final static String updateDateQuery = "UPDATE orders SET date_order = :date WHERE id = :orderId";
 
     @Inject
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public OrderEntity getOrderInProgressByUserId(Integer idUser) {
+    public List<OrderEntity> getOrderInProgressByUserId(Integer idUser) {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("userId", idUser);
 
@@ -94,7 +96,7 @@ public class OrderRepository {
             return new ArrayList<>(orderMap.values());
         });
 
-        return toEntity(orders.get(0));
+        return orders.stream().map(OrderMapper::toEntity).toList();
     }
 
     public List<OrderEntity> getOrdersByUserId(Integer idUser) {
@@ -146,7 +148,7 @@ public class OrderRepository {
 
         jdbcTemplate.update(createOrder, params);
 
-        return jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", new MapSqlParameterSource(), Integer.class);
+        return jdbcTemplate.queryForObject("SELECT id from orders where date_order is null and id_user="+userId, new MapSqlParameterSource(), Integer.class);
     }
 
     public void addOrUpdateOrderProducts(int orderId, OrderProduct orderProduct) {
@@ -164,11 +166,16 @@ public class OrderRepository {
     }
 
     public void removeUnusedOrderProducts(int orderId, List<Integer> productIds) {
-      MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("orderId", orderId)
-                .addValue("productIds", productIds);
-
-        jdbcTemplate.update(deleteQuery, params);
+        if(!productIds.isEmpty()) {
+            MapSqlParameterSource params = new MapSqlParameterSource()
+                    .addValue("orderId", orderId)
+                    .addValue("productIds", productIds);
+            jdbcTemplate.update(deleteQuery, params);
+      }else{
+            MapSqlParameterSource params = new MapSqlParameterSource()
+                    .addValue("orderId", orderId);
+            jdbcTemplate.update(deleteAllQuery, params);
+      }
     }
 
     public void updateOrderDate(int orderId, String date) {

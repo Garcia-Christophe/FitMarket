@@ -20,7 +20,7 @@ public class OrderBusiness {
 
 
     public Order getOrderInProgressByUserId(Integer idUser) {
-        OrderEntity orderEntity = orderRepository.getOrderInProgressByUserId(idUser);
+        OrderEntity orderEntity = orderRepository.getOrderInProgressByUserId(idUser).get(0);
 
         return toDto(orderEntity);
     }
@@ -43,12 +43,14 @@ public class OrderBusiness {
     }
 
     private int getOrCreateCurrentOrder(Integer userId) {
-        OrderEntity orderEntity = orderRepository.getOrderInProgressByUserId(userId);
+        List<OrderEntity> orderEntity = orderRepository.getOrderInProgressByUserId(userId);
 
-        if (orderEntity!=null) {
+
+        if (!orderEntity.isEmpty()) {
             // La commande en cours existe déjà
-            return orderEntity.getId();
+            return orderEntity.get(0).getId();
         }
+
         return orderRepository.createOrder(userId);
     }
 
