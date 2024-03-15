@@ -226,6 +226,23 @@ async function publishComment() {
         }
       })
     })
+
+    console.log({
+      content: newComment.value.content,
+      date_time: new Date(newComment.value.date_time).toISOString().slice(0, 19).replace('T', ' '),
+      images: newComment.value.images,
+      note: newComment.value.note,
+      title: newComment.value.title,
+      product: {
+        id: product.value.id,
+      },
+      user: {
+        lastname: JSON.parse(localStorage.getItem('connectedUser')).lastname,
+        firstname: JSON.parse(localStorage.getItem('connectedUser')).firstname,
+        email: JSON.parse(localStorage.getItem('connectedUser')).email,
+        password: JSON.parse(localStorage.getItem('connectedUser')).password,
+      }
+    });
     if (data.ok) {
       comments.value.push(newComment.value)
 

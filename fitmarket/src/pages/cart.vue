@@ -127,30 +127,36 @@ function isConnected() {
 }
 
 async function validOrder() {
-  // Enregistrement de la commande
-  const jsonToSend = {
-    id: orderId,
-    date_order: new Date().toISOString().slice(0, 19).replace('T', ' '),
-    products: []
-  }
-  products.value.forEach((product) => jsonToSend.products.push({ quantity: product.quantity, product: { id: product.idProduct } }))
-  const data = await fetch(`http://localhost:8080/api/v1/orders/${user.value.id}`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(jsonToSend)
-  })
+  if (products.value.length) {
+    // Enregistrement de la commande
+    const jsonToSend = {
+      id: orderId,
+      date_order: new Date().toISOString().slice(0, 19).replace('T', ' '),
+      products: []
+    }
+    products.value.forEach((product) => jsonToSend.products.push({ quantity: product.quantity, product: { id: product.idProduct } }))
+    const data = await fetch(`http://localhost:8080/api/v1/orders/${user.value.id}`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(jsonToSend)
+    })
 
-  if (data.ok) {
-    // Mise à jour de la vue
-    products.value.splice(0, products.value.length)
-    orderId = -1;
+    if (data.ok) {
+      // Mise à jour de la vue
+      products.value.splice(0, products.value.length)
+      orderId = -1;
 
-    // Notification : commande validée
-    orderValidated.value = true;
-    setTimeout(() => orderValidated.value = false, 5000)
+      // Notification : commande validée
+      orderValidated.value = true;
+      setTimeout(() => orderValidated.value = false, 5000)
+    } else {
+      // Notification
+      orderImpossible.value = true;
+      setTimeout(() => orderImpossible.value = false, 2000)
+    }
   } else {
     // Notification
     orderImpossible.value = true;
