@@ -1,7 +1,11 @@
 package com.android.m2.tiila.fitmarket.data.api
 
 import kotlinx.serialization.Serializable
-
+@Serializable
+data class ConnectionDto(
+    val member: MemberDto?,
+    val error: String?
+)
 
 @Serializable
 data class MemberDto(

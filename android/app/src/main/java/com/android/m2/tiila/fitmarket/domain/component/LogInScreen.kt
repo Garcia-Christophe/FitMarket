@@ -1,5 +1,6 @@
 package com.android.m2.tiila.fitmarket.domain.component
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -8,18 +9,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.style.TextAlign
 import com.android.m2.tiila.fitmarket.domain.model.FitMarketViewModel
-import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun LogInScreen(
     navHostController: NavHostController,
     onLoginTextChanged: (String) -> Unit = {},
     onPasswordTextChanged: (String) -> Unit = {},
+    fitMarketViewModel: FitMarketViewModel
 ) {
-    val fitMarketViewModel = getViewModel<FitMarketViewModel>()
+
+    val focusManager = LocalFocusManager.current
+    val state by fitMarketViewModel.signInResult.collectAsState()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var errorText by remember { mutableStateOf("") }
+
+    LaunchedEffect(state) {
+        if(!state.isLoading){
+            if (state.errorMessage == null || state.errorMessage!!.isEmpty()) {
+                errorText = ""
+                navHostController.navigate(route = Screen.ListClassesScreen.route)
+            } else {
+                errorText = state.errorMessage ?: "Erreur"
+            }
+        }else{
+            print("ok")
+        }
+
+    }
+
     Surface {
         Column(
             verticalArrangement = Arrangement.Center,
@@ -27,11 +50,18 @@ fun LogInScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 30.dp)
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        focusManager.clearFocus()
+                    })
+                }
         ) {
             Text(
                 text = "FitMarket",
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = 16.dp)
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(bottom = 8.dp)
             )
             LoginField(
                 value = email,
@@ -47,14 +77,21 @@ fun LogInScreen(
                     password = it
                     onPasswordTextChanged(it)
                 },
-                submit = { fitMarketViewModel.signIn(email,password) },
+                submit = {  },
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(20.dp))
+            if (errorText.isNotEmpty()) {
+                Text(
+                    text = errorText,
+                    color = Color.Red,
+                    modifier = Modifier.padding(start = 8.dp, top = 4.dp)
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+            }
             Button(
                 onClick = {
-                    fitMarketViewModel.signIn(email,password)
-                    println("Connecter : "+fitMarketViewModel.signInResult.value.member)
+                        fitMarketViewModel.submitForm(email=email, password=password)
                 },
                 enabled = true,
                 shape = RoundedCornerShape(5.dp),
@@ -64,4 +101,6 @@ fun LogInScreen(
             }
         }
     }
+
+
 }
