@@ -541,15 +541,15 @@ VALUES
     (30, 'https://cdn.shopify.com/s/files/1/2216/7835/products/GRAPHICSFRACTIONOVERSIZEDT-SHIRT-Black-White-B3A6L-BBGR.A_da957273-925c-4108-a48b-17e301d517df.jpg?v=1663658984'),
     (30, 'https://cdn.shopify.com/s/files/1/2216/7835/products/GRAPHICSFRACTIONOVERSIZEDT-SHIRT-Black-White-B3A6L-BBGR.C_5535a8e8-0c6c-4405-95ce-00f1c146c42c.jpg?v=1663658984'),
     -- Cours
-    (21, 'https://i3.ytimg.com/vi/vftQ8xvlSic/maxresdefault.jpg'),
-    (22, 'https://i3.ytimg.com/vi/9XN-_UIo9tM/maxresdefault.jpg'),
-    (23, 'https://i3.ytimg.com/vi/oHETiT6kXaA/maxresdefault.jpg'),
-    (24, 'https://i3.ytimg.com/vi/w_LnxNJuxJI/maxresdefault.jpg'),
-    (25, 'https://i3.ytimg.com/vi/lugeXEY2vYI/maxresdefault.jpg'),
-    (26, 'https://i3.ytimg.com/vi/rniSf3BDef0/maxresdefault.jpg'),
-    (27, 'https://i3.ytimg.com/vi/WCrjyTaP0Pc/maxresdefault.jpg'),
-    (28, 'https://i3.ytimg.com/vi/U3HueZj9wU0/maxresdefault.jpg'),
-    (29, 'https://i3.ytimg.com/vi/gZph6ng7QXE/maxresdefault.jpg'),
+    (31, 'https://i3.ytimg.com/vi/vftQ8xvlSic/maxresdefault.jpg'),
+    (32, 'https://i3.ytimg.com/vi/9XN-_UIo9tM/maxresdefault.jpg'),
+    (33, 'https://i3.ytimg.com/vi/oHETiT6kXaA/maxresdefault.jpg'),
+    (34, 'https://i3.ytimg.com/vi/w_LnxNJuxJI/maxresdefault.jpg'),
+    (35, 'https://i3.ytimg.com/vi/lugeXEY2vYI/maxresdefault.jpg'),
+    (36, 'https://i3.ytimg.com/vi/rniSf3BDef0/maxresdefault.jpg'),
+    (37, 'https://i3.ytimg.com/vi/WCrjyTaP0Pc/maxresdefault.jpg'),
+    (38, 'https://i3.ytimg.com/vi/U3HueZj9wU0/maxresdefault.jpg'),
+    (39, 'https://i3.ytimg.com/vi/gZph6ng7QXE/maxresdefault.jpg'),
     (30, 'https://i3.ytimg.com/vi/Rn-iTuIaRNs/maxresdefault.jpg');
 
 -- Ajout de cours
@@ -569,8 +569,8 @@ VALUES
 -- Ajout de commandes
 INSERT INTO orders (id_user, date_order)
 VALUES
-    (1, '20241201'),
-    (1, '20240502'),
+    (1, '20231201'),
+    (1, '20230502'),
     (1, NULL);
 
 -- Ajout de produits dans les commandes
@@ -589,13 +589,13 @@ INSERT INTO comment (title, content, date_time, note, id_user, id_product)
 VALUES
     -- Matériel > Ceinture de lest
     ('Une histoire d''amour... Tout bonnement', 'Les formes de cette ceinture épousent parfaitement le bas de mon dos. Je me sens supporté et encouragé à l''effort de haut en bas dans mes répétitions. Ca faisait longtemps que je n''avais pas pris autant de plaisir à pratiquer une activité sportive. Je recommande à 169 % !', '2023-12-01 12:54:02', 5, 1, 3),
-    ('Matériaux très qualitatifs', 'Matériaux très qualitatifs et ceinture fonctionnelle. Testée en traction et dips, très bonne expérience (moins de24 heures, mais je suis jusqu''à présent très satisfait du produit).', '2023-11-29 13:25:28', 5, 2, 1),
+    ('Matériaux très qualitatifs', 'Matériaux très qualitatifs et ceinture fonctionnelle. Testée en traction et dips, très bonne expérience (moins de24 heures, mais je suis jusqu''à présent très satisfait du produit).', '2023-11-29 13:25:28', 5, 2, 3),
     ('Une bonne ceinture pour des gros PR', 'J''avais déjà eu l''occasion de tester cette ceinture grâce à un ami et je l''avais adorée. Je l''ai donc commandée à mon tour pour qu''elle puisse m''accompagner dans ma recherche de performance sur les dips et tractions lestées.
-Attention, elle tire un peu au niveau du bas du dos lorsqu''on commence à mettre une grosse charge !', '2023-10-07 18:17:19', 3, 3, 1),
+Attention, elle tire un peu au niveau du bas du dos lorsqu''on commence à mettre une grosse charge !', '2023-10-07 18:17:19', 3, 3, 3),
     ('Ceinture de lest, au top', 'La ceinture inspire confiance. Bien longue et large, très confortable.
 La chaine fournit est assez longue et est solide
 Les 2 mousquetons mettent en confiance.
-Très satisfait de mon achat donc ! Merci team FitMarket', '2023-12-14 19:43:01', 4, 4, 1),
+Très satisfait de mon achat donc ! Merci team FitMarket', '2023-12-14 19:43:01', 4, 4, 3),
     -- Nutrition > Crème protéinée au Chocolat
     ('Service client exceptionnel', 'Service client exceptionnel ! J''avais un soucis avec ma crème protéinée (défaut de production au niveau du couvercle). J''ai contacté le service client et j''ai pu avoir un nouveau pot sans le moindre inconvénient, ce qui m''a permis du coup de réutiliser ma slide bar, me faire économiser de l''argent et de moins polluer finalement !', '2023-12-10 08:28:42', 5, 5, 11),
     ('Produit très bien', 'Si on abuse pas sur la quantité le goût est bon, pas écoeurant. Je suis contente, parfait pour tartine ou barre céréale maison.
@@ -614,10 +614,12 @@ VALUES
     (1, 'https://meilleurdusport.fr/wp-content/uploads/2022/08/meilleure-ceinture-de-lest-lestee-musculation-avis-comparatif-2.jpg'),
     (1, 'https://homefittraining.fr/wp-content/uploads/2023/04/meilleures-ceintures-lestage-criteres-de-choix.jpg'),
     (1, 'https://www.musculation-bras.fr/wp-content/uploads/2021/03/ceinture-lestee.gif'),
-    (1, 'https://m.media-amazon.com/images/I/81yO576EHLL._AC_UF1000,1000_QL80_.jpg'),
+    (1, 'https://manueklear.com/cdn/shop/files/image_1_a6ded17b-d8dc-47dc-a24d-2b4e6a5e09d8.jpg?v=1685070836'),
+    (1, 'https://media.s-bol.com/xo2Xyo0mm8E3/Q1lwyql/550x550.jpg'),
+    (1, 'https://contents.mediadecathlon.com/p2102019/k$535c8da78637cd5c8f64bb89f407d5ef/sq/weight-training-weighted-chain-belt-for-dips-and-pull-ups-120-kg.jpg?format=auto&f=800x0'),
     (1, 'https://spartan-homegym.fr/cdn/shop/products/NB56_0054-closeup_620x.jpg?v=1655474319'),
     (2, 'https://cdn.shopify.com/s/files/1/0364/7792/7564/files/Ceintured_halterophilieavecchainedetrempage_600x600.jpg?v=1686611153'),
-    (2, 'https://www.gornation.com/cdn/shop/products/4ropefordilbeltweighteddips_1_288x.jpg?v=1704798288'),
+    (2, 'https://media.alltricks.com/hd/16089345f15506bbbc831.61039129.jpg'),
     (4, 'https://www.gornation.com/cdn/shop/files/dip-belt-up-to-1000kg_1200x.jpg?v=1695131338'),
     (5, 'https://www.nu3.fr/cdn/shop/files/nu3_pdp_Vegan-Protein-Cream-Hazelnut-Cacao_600x300px-2-1_600x_a5361b4e-560c-4c58-aac5-e0a063e0f3c4_600x.webp?v=1704796270'),
     (5, 'https://www.nu3.fr/cdn/shop/files/nu3_pdp_Vegan-Protein-Cream-Hazelnut-Cacao_600x300px-2_600x_69914429-a85e-4a94-96b2-4cb09a068972_600x.webp?v=1704796335'),

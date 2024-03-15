@@ -50,13 +50,13 @@ public class OrderController {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateOrder(@PathParam("idUser") Integer idUser,Order order){
-        try{
+        //try{
             this.orderBusiness.updateOrder(idUser, toEntity(order));
             return Response.ok("Commande ajouté.").build();
-        }catch (Exception e){
+        /*}catch (Exception e){
             BadRequestException badRequestException =  new BadRequestException();
             return badRequestException.toResponse(Response.Status.BAD_REQUEST, "Modification du panier impossible.");
-        }
+        }*/
 
     }
 }

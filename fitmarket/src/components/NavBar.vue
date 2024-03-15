@@ -63,7 +63,7 @@
 
     <v-btn v-if="!collapseNavBar" prepend-icon="mdi mdi-account"
       :href="isConnected() ? '/account' : '/sign'">Compte</v-btn>
-    <v-btn v-if="!collapseNavBar && isConnected()" prepend-icon="mdi mdi-cart">Panier</v-btn>
+    <v-btn v-if="!collapseNavBar && isConnected()" prepend-icon="mdi mdi-cart" href="/cart">Panier</v-btn>
   </v-app-bar>
 </template>
 

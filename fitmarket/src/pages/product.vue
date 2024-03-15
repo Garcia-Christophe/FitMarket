@@ -250,7 +250,40 @@ function copyLink() {
   setTimeout(() => linkCopied.value = false, 2000)
 }
 
-function addToCart() {
+async function addToCart() {
+  // Enregistrement de la commande
+  const userId = JSON.parse(localStorage.getItem('connectedUser')).id
+  let orderInProgress;
+  try {
+    orderInProgress = await (await fetch(`http://localhost:8080/api/v1/orders/${userId}/inprogress`)).json()
+  } catch (e) {
+    console.log(e);
+  }
+
+  if (orderInProgress.code === '404') {
+    orderInProgress = { products: [{ quantity: Number(quantity.value), product: { id: product.value.id } }] }
+  } else {
+    const existingProduct = orderInProgress.products.find((p) => p.product.id === product.value.id)
+    if (existingProduct) {
+      // Augmentation de la quantité
+      existingProduct.quantity += quantity.value
+    } else {
+      // Ajout du produit
+      orderInProgress.products.push({ quantity: quantity.value, product: { id: product.value.id } })
+    }
+  }
+  console.log(JSON.stringify(orderInProgress));
+
+  await fetch(`http://localhost:8080/api/v1/orders/${userId}`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(orderInProgress)
+  })
+
+  // Notification
   addedToCart.value = true;
   setTimeout(() => addedToCart.value = false, 2000)
 }

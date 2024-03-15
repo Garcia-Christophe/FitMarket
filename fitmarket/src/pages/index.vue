@@ -8,7 +8,8 @@
       style="background: url('backgroundAccueilAllonge.png'); background-size: cover; background-position: center; display: flex; justify-content: center; position: absolute; height: 400px; width: 100%;">
       <v-row class="row-acheter-maintenant">
         <v-btn prepend-icon="mdi mdi-star" v-on:click="scrollTo('best-comments')">Vos avis</v-btn>
-        <v-btn rounded="xl" style="background: #D7473F; color: white;">Acheter maintenant</v-btn>
+        <v-btn rounded="xl" style="background: #D7473F; color: white;" @click="() => $router.push('/cart')">Acheter
+          maintenant</v-btn>
         <v-btn prepend-icon="mdi mdi-handshake" v-on:click="scrollTo('partners')">Partenaires</v-btn>
       </v-row>
     </div>
