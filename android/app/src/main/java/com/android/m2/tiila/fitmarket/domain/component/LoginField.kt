@@ -1,5 +1,6 @@
 package com.android.m2.tiila.fitmarket.domain.component
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -12,9 +13,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,6 +29,7 @@ fun LoginField(
     label: String = "Email",
     placeholder: String = "Entrer votre email"
 ) {
+
 
     val focusManager = LocalFocusManager.current
     val leadingIcon = @Composable {
@@ -47,6 +52,6 @@ fun LoginField(
         placeholder = { Text(placeholder) },
         label = { Text(label) },
         singleLine = true,
-        visualTransformation = VisualTransformation.None
+        visualTransformation = VisualTransformation.None,
     )
 }

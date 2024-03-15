@@ -14,7 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.android.m2.tiila.fitmarket.domain.component.SetupNavGraph
+import com.android.m2.tiila.fitmarket.domain.model.FitMarketViewModel
 import com.android.m2.tiila.fitmarket.ui.theme.FitMarketTheme
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
@@ -29,7 +31,8 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     val navHostController = rememberNavController()
-                    SetupNavGraph(navHostController = navHostController)
+                    val fitMarketViewModel = getViewModel<FitMarketViewModel>()
+                    SetupNavGraph(navHostController = navHostController, fitMarketViewModel = fitMarketViewModel)
                 }
             }
         }

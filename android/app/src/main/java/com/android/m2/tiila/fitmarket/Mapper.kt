@@ -1,7 +1,9 @@
 package com.android.m2.tiila.fitmarket
 
+import com.android.m2.tiila.fitmarket.data.api.ConnectionDto
 import com.android.m2.tiila.fitmarket.domain.model.Member
 import com.android.m2.tiila.fitmarket.data.api.MemberDto
+import com.android.m2.tiila.fitmarket.domain.model.Connection
 
 
 fun toDomain(dto: MemberDto): Member {
@@ -14,12 +16,9 @@ fun toDomain(dto: MemberDto): Member {
     )
 }
 
-fun toDto(domain: Member): MemberDto {
-    return MemberDto(
-        id = domain.id,
-        lastname = domain.lastname,
-        firstname = domain.firstname,
-        email = domain.email,
-        password = domain.password
+fun toDomain(dto: ConnectionDto): Connection {
+    return Connection(
+        member = dto.member?.let { toDomain(it) },
+        error = dto.error
     )
 }
