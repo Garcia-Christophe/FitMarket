@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -34,11 +35,14 @@ import com.android.m2.tiila.fitmarket.domain.model.FitMarketViewModel
 @Composable
 fun HeaderUserLogOut(
     navHostController: NavHostController,
-    fitMarketViewModel: FitMarketViewModel
+    fitMarketViewModel: FitMarketViewModel,
+    lastName: String,
+    firstName: String
 ) {
-    val (memberFirst, memberLast) = fitMarketViewModel.getLoggedInUserFullName() ?: Pair("", "")
     Row(
-        modifier = Modifier.fillMaxWidth().background(color = Color.LightGray) ,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = Color.LightGray) ,
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
 
@@ -49,7 +53,7 @@ fun HeaderUserLogOut(
             tint = MaterialTheme.colorScheme.primary
         )
         Text(
-            text = "$memberFirst $memberLast"
+            text = "$lastName $firstName"
         )
         Spacer(modifier = Modifier.weight(1f))
         Button(
