@@ -135,4 +135,6 @@ dependencies {
 
     testImplementation(kotlin("test-junit"))
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
+
+    implementation("com.google.android.exoplayer:exoplayer:2.15.1")
 }

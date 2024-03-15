@@ -32,6 +32,7 @@ fun LogInScreen(
     LaunchedEffect(state) {
         if(!state.isLoading){
             if (state.errorMessage == null || state.errorMessage!!.isEmpty()) {
+                fitMarketViewModel.collectClassesUser()
                 errorText = ""
                 navHostController.navigate(route = Screen.ListClassesScreen.route)
             } else {

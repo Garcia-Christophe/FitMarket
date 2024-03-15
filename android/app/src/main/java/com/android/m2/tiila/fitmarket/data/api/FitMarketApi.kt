@@ -39,6 +39,31 @@ class FitMarketApi(
             return Resource.Error(null)
         }
     }
+
+    suspend fun collectClassesUser(id: Int): Resource<ClassesResultDto> {
+        try {
+            val response:HttpResponse = client.get("$baseUrl/classes/user/$id") {
+                contentType(ContentType.Application.Json)
+            }
+            if (response.status.value!=200) {
+                val responseBody = response.bodyAsText()
+                val json = Json { ignoreUnknownKeys = true }
+                val jsonObject = json.parseToJsonElement(responseBody).jsonObject
+                val errorDescription = jsonObject["description"]?.jsonPrimitive?.contentOrNull
+                val collect = ClassesResultDto(classes = null,error = errorDescription)
+                return Resource.Error(collect)
+            } else {
+
+                val responseBody = response.bodyAsText()
+                val json = Json { ignoreUnknownKeys = true }
+                val classesDto: List<ClasseDto> = json.decodeFromString(responseBody)
+                val connection = ClassesResultDto(classes = classesDto,error = null)
+                return Resource.Success(connection)
+            }
+        }catch (e:Exception) {
+            return Resource.Error(null)
+        }
+    }
 }
 
 

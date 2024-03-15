@@ -1,16 +1,12 @@
 package com.android.m2.tiila.fitmarket.domain.model
 
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.m2.tiila.fitmarket.data.core.Status
 import com.android.m2.tiila.fitmarket.data.repository.FitMarketRepositoryInterface
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 
 data class ConnectionModelState(
@@ -18,10 +14,19 @@ data class ConnectionModelState(
     var errorMessage : String? = " ",
     var isLoading: Boolean = false,
 )
+
+data class ClassesModelState(
+    var classes: List<Classe>? = null,
+    var errorMessage : String? = " ",
+    var isLoading: Boolean = false,
+)
 open class FitMarketViewModel (private val repository: FitMarketRepositoryInterface) : ViewModel(){
 
     private val _signInResult = MutableStateFlow<ConnectionModelState>(ConnectionModelState())
     var signInResult = _signInResult.asStateFlow()
+
+    private val _classesResult = MutableStateFlow<ClassesModelState>(ClassesModelState())
+    var classesResult = _classesResult.asStateFlow()
 
     fun logout() {
         _signInResult.value.member=null;
@@ -36,6 +41,12 @@ open class FitMarketViewModel (private val repository: FitMarketRepositoryInterf
             null
         }
     }
+
+    fun getLoggedInUserId(): Int? {
+        val user = signInResult.value?.member
+       return user?.id
+    }
+
     fun submitForm(email: String, password: String) = signIn(email=email,password=password)
 
     private fun signIn(email: String, password: String) {
@@ -51,6 +62,25 @@ open class FitMarketViewModel (private val repository: FitMarketRepositoryInterf
                 )
             }
         }
+
+    }
+
+    fun collectClassesUser() {
+        viewModelScope.launch {
+
+            val flow = getLoggedInUserId()?.let { repository.collectClassesUser(id = it) }
+
+            if (flow != null) {
+                flow.collect {
+                    _classesResult.value = ClassesModelState(
+                        classes = it.data?.classes,
+                        errorMessage = it.data?.error,
+                        isLoading = it.status == Status.LOADING
+                    )
+                }
+            }
+        }
+
 
     }
 }
